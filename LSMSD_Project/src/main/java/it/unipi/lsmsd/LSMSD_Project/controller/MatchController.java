@@ -1,9 +1,7 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
-import it.unipi.lsmsd.LSMSD_Project.dto.MatchDTO;
 import it.unipi.lsmsd.LSMSD_Project.model.Match;
 import it.unipi.lsmsd.LSMSD_Project.service.MatchService;
-import it.unipi.lsmsd.LSMSD_Project.mapper.MatchMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +14,7 @@ public class MatchController {
     private MatchService matchService;
 
     @PostMapping("/register")
-    public ResponseEntity<Match> registerMatch(@RequestBody MatchDTO matchDTO) {
-        Match match = MatchMapper.toEntity(matchDTO);
+    public ResponseEntity<Match> registerMatch(@RequestBody Match match) {
         Match newMatch = matchService.registerNewMatch(match);
         return ResponseEntity.ok(newMatch);
     }

@@ -1,11 +1,10 @@
 package it.unipi.lsmsd.LSMSD_Project.service;
 
 import it.unipi.lsmsd.LSMSD_Project.dao.UserRepository;
-import it.unipi.lsmsd.LSMSD_Project.dto.UserDTO;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;//ciao
+import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
