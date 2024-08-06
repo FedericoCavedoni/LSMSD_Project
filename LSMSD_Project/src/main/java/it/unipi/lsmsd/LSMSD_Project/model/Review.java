@@ -5,17 +5,29 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import java.sql.Timestamp;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Setter
 @Getter
 @Data
 @Document(collection = "Review")
 public class Review {
+
+    @Field(name = "username")
+    private String username;
+
+    @Field(name = "rating")
+    private float rating;
+
+    @Field(name = "review Text")
+    private String reviewText;
+
     @Id
     private String id;
-    private int rate;
-    private String comment;
-    private Timestamp date;
 
+    @Field(name = "game")
+    private String game;
+
+    @Field(name = "date")
+    private String date;
 }

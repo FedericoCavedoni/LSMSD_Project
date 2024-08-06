@@ -13,10 +13,6 @@ public class BoardGameService {
     @Autowired
     private BoardGameRepository boardGameRepository;
 
-    public BoardGame registerNewBoardGame(BoardGame boardGame) {
-        return boardGameRepository.save(boardGame);
-    }
-
     public List<BoardGame> getAllBoardGames() {
         return boardGameRepository.findAll();
     }
@@ -44,5 +40,22 @@ public class BoardGameService {
             return boardGameRepository.save(existingBoardGame);
         }
         return null;
+    }
+
+    public BoardGame addBoardGame(BoardGame boardGame) {
+        BoardGame existingBoardGame = boardGameRepository.findByName(boardGame.getName());
+        if (existingBoardGame == null) {
+            return boardGameRepository.save(boardGame);
+        }
+        return null;
+    }
+
+    public boolean deleteBoardGameByName(String name) {
+        BoardGame existingBoardGame = boardGameRepository.findByName(name);
+        if (existingBoardGame != null) {
+            boardGameRepository.delete(existingBoardGame);
+            return true;
+        }
+        return false;
     }
 }
