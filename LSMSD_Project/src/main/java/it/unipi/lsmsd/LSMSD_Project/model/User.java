@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Field;
+
 import java.util.List;
 
 @Setter
@@ -15,7 +17,8 @@ import java.util.List;
 public class User {
     @Id
     private ObjectId id; // Utilizza ObjectId per l'identificatore
-    private String Username;
+    @Field(name = "username")
+    private String username;
     private String Nome;
     private String Cognome;
     private String Email;

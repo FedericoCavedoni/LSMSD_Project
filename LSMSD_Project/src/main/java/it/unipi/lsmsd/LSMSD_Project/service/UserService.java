@@ -7,6 +7,7 @@ import it.unipi.lsmsd.LSMSD_Project.model.UserNode;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import it.unipi.lsmsd.LSMSD_Project.utils.UserAlreadyExistsException;
 @Service
 public class UserService {
 
@@ -19,6 +20,10 @@ public class UserService {
     //private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User registerNewUser(User user) {
+        // Verifica se l'username esiste già
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            throw new UserAlreadyExistsException("Username già esistente: " + user.getUsername());
+        }
         // Salva l'utente in MongoDB
         User savedUser = userRepository.save(user);
 
