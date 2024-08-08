@@ -4,10 +4,13 @@ import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameRepository;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGameNode;
 import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameNodeRepository;
+import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BoardGameService {
@@ -77,4 +80,9 @@ public class BoardGameService {
         }
         return false;
     }
+
+    public List<Relation> getBoardGameRelationships(String boardGameName, String relation) {
+        return boardGameNodeRepository.findBoardGameRelationships(boardGameName, relation);
+    }
+
 }
