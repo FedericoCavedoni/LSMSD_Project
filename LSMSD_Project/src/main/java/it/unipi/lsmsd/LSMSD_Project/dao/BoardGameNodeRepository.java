@@ -18,6 +18,7 @@ public interface BoardGameNodeRepository extends Neo4jRepository<BoardGameNode, 
 
     @Query("MATCH (b:BoardGame {name: $name})-[r]-(n) " +
             "WHERE $relation IS NULL OR type(r) = $relation " +
-            "RETURN b.name AS firstNode, type(r) AS relationType, n.username AS secondNode")
-    List<Relation> findBoardGameRelationships(String name, String relation);
+            "RETURN b.name AS firstNode, type(r) AS relationType, n.username AS secondNode " +
+            "LIMIT $limit")
+    List<Relation> findBoardGameRelationships(String name, String relation, int limit);
 }

@@ -9,7 +9,6 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class RelationshipService {
@@ -23,18 +22,18 @@ public class RelationshipService {
     @Autowired
     private BoardGameService boardGameService;
 
-    public List<Relation> getUserRelationships(String username, String relation) {
-        return userService.getUserRelationships(username, relation);
+    public List<Relation> getUserRelationships(String username, String relation, int num) {
+        return userService.getUserRelationships(username, relation, num);
     }
 
-    public List<Relation> getBoardGameRelationships(String boardGameName, String relation) {
-        return boardGameService.getBoardGameRelationships(boardGameName, relation);
+    public List<Relation> getBoardGameRelationships(String boardGameName, String relation, int num) {
+        return boardGameService.getBoardGameRelationships(boardGameName, relation, num);
     }
 
     @Transactional
     public void followUser(String followerUsername, String followeeUsername) {
 
-        if (!userExists(followerUsername) || !boardGameExists(followeeUsername)) {
+        if (userNotExists(followerUsername) || userNotExists(followeeUsername)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
 
@@ -48,7 +47,7 @@ public class RelationshipService {
     @Transactional
     public void likeBoardGame(String username, String boardGameName) {
 
-        if (!userExists(username) || !boardGameExists(boardGameName)) {
+        if (userNotExists(username) || boardGameNotExists(boardGameName)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User or BoardGame not found");
         }
 
@@ -62,7 +61,7 @@ public class RelationshipService {
     @Transactional
     public void reviewBoardGame(String username, String boardGameName) {
 
-        if (!userExists(username) || !boardGameExists(boardGameName)) {
+        if (userNotExists(username) || boardGameNotExists(boardGameName)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User or BoardGame not found");
         }
 
@@ -76,7 +75,7 @@ public class RelationshipService {
     @Transactional
     public void addToLibrary(String username, String boardGameName) {
 
-        if (!userExists(username) || !boardGameExists(boardGameName)) {
+        if (userNotExists(username) || boardGameNotExists(boardGameName)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User or BoardGame not found");
         }
 
@@ -87,20 +86,63 @@ public class RelationshipService {
                 .run();
     }
 
-    boolean userExists(String username){
+    boolean userNotExists(String username){
+        System.out.print(username);
         return neo4jClient.query("MATCH (u:User {username: $username}) RETURN u")
                 .bind(username).to("username")
                 .fetch()
                 .one()
-                .isPresent();
+                .isEmpty();
     }
 
-    boolean boardGameExists(String boardGameName){
+    boolean boardGameNotExists(String boardGameName){
         return neo4jClient.query("MATCH (b:BoardGame {name: $name}) RETURN b")
                 .bind(boardGameName).to("name")
                 .fetch()
                 .one()
-                .isPresent();
+                .isEmpty();
 
     }
+
+    @Transactional
+    public Relation findRelationship(String firstNode, String relationType, String secondNode) {
+        String query = "MATCH (a)-[r:" + relationType + "]-(b) " +
+                "WHERE (a.username = $firstNode OR a.name = $firstNode) " +
+                "AND (b.username = $secondNode OR b.name = $secondNode) " +
+                "RETURN a AS firstNode, type(r) AS relationType, b AS secondNode";
+
+        return neo4jClient.query(query)
+                .bind(firstNode).to("firstNode")
+                .bind(secondNode).to("secondNode")
+                .fetchAs(Relation.class)
+                .mappedBy((typeSystem, record) -> {
+                    String firstNodeName = record.get("firstNode").asNode().hasLabel("User") ?
+                            record.get("firstNode").asNode().get("username").asString(null) :
+                            record.get("firstNode").asNode().get("name").asString(null);
+
+                    String secondNodeName = record.get("secondNode").asNode().hasLabel("User") ?
+                            record.get("secondNode").asNode().get("username").asString(null) :
+                            record.get("secondNode").asNode().get("name").asString(null);
+
+                    return new Relation(firstNodeName, relationType, secondNodeName);
+                })
+                .one()
+                .orElse(null);
+
+    }
+
+    @Transactional
+    public void deleteRelationship(String firstNode, String relationType, String secondNode) {
+        String query = "MATCH (a)-[r:" + relationType + "]-(b) " +
+                "WHERE (a.username = $firstNode OR a.name = $firstNode) " +
+                "AND (b.username = $secondNode OR b.name = $secondNode) " +
+                "DELETE r";
+
+        neo4jClient.query(query)
+                .bind(firstNode).to("firstNode")
+                .bind(secondNode).to("secondNode")
+                .run();
+    }
 }
+
+

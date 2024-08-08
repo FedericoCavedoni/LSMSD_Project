@@ -20,32 +20,14 @@ public class RelationshipController {
 
     @GetMapping("/user")
     public ResponseEntity<List<Relation>> getUserRelationships(@RequestParam String username, @RequestParam(required = false) String relation, @RequestParam int n) {
-        List<Relation> relationships = relationshipService.getUserRelationships(username, relation);
-
-        List<Relation> selectedRelationships;
-
-        if (relationships.size() > n) {
-            selectedRelationships = relationships.subList(0, n);
-        } else {
-            selectedRelationships = relationships;
-        }
-
-        return ResponseEntity.ok(selectedRelationships);
+        List<Relation> relationships = relationshipService.getUserRelationships(username, relation, n);
+        return ResponseEntity.ok(relationships);
     }
 
     @GetMapping("/boardgame")
     public ResponseEntity<List<Relation>> getBoardGameRelationships(@RequestParam String name,  @RequestParam(required = false) String relation, @RequestParam int n) {
-        List<Relation> relationships = relationshipService.getBoardGameRelationships(name, relation);
-
-        List<Relation> selectedRelationships;
-
-        if (relationships.size() > n) {
-            selectedRelationships = relationships.subList(0, n);
-        } else {
-            selectedRelationships = relationships;
-        }
-
-        return ResponseEntity.ok(selectedRelationships);
+        List<Relation> relationships = relationshipService.getBoardGameRelationships(name, relation, n);
+        return ResponseEntity.ok(relationships);
     }
 
     @PostMapping("/addFollow")
@@ -89,6 +71,34 @@ public class RelationshipController {
             throw e;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+        }
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<Relation> findRelationship(
+            @RequestParam String firstNode,
+            @RequestParam String relationType,
+            @RequestParam String secondNode) {
+
+        Relation relation = relationshipService.findRelationship(firstNode, relationType, secondNode);
+        if (relation != null) {
+            return ResponseEntity.ok(relation);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteRelationship(
+            @RequestParam String firstNode,
+            @RequestParam String relationType,
+            @RequestParam String secondNode) {
+
+        try {
+            relationshipService.deleteRelationship(firstNode, relationType, secondNode);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

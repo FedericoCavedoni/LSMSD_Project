@@ -46,7 +46,7 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public List<Relation> getUserRelationships(String username, String relation) {
-        return userNodeRepository.findUserRelationships(username, relation);
+    public List<Relation> getUserRelationships(String username, String relation, int num) {
+        return userNodeRepository.findUserRelationships(username, relation, num);
     }
 }
