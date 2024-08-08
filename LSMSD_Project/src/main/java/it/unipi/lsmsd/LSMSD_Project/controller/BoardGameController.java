@@ -46,7 +46,7 @@ public class BoardGameController {
         if (newBoardGame != null) {
             return ResponseEntity.ok(newBoardGame);
         } else {
-            return ResponseEntity.status(409).body(null); // Conflict status if the game already exists
+            return ResponseEntity.status(409).body(null);
         }
     }
 
