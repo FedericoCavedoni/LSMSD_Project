@@ -75,6 +75,7 @@ public class UserController {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
         }
     }
+
     @GetMapping("/logout")
     public ResponseEntity<String> logoutUser(HttpSession session) {
         session.invalidate(); // Invalida la sessione corrente
@@ -89,6 +90,16 @@ public class UserController {
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<String> handleInvalidCredentialsException(InvalidCredentialsException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getUserProfile(@RequestParam String username) {
+        User user = userService.getUserProfile(username);
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
     }
 }
 

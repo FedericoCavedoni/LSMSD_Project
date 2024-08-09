@@ -59,4 +59,16 @@ public class UserService {
     public List<Relation> getUserRelationships(String username, String relation, int num) {
         return userNodeRepository.findUserRelationships(username, relation, num);
     }
+
+    public User getUserProfile(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            User limitedUser = new User();
+            limitedUser.setUsername(user.getUsername());
+            limitedUser.setLibrary(user.getLibrary());
+            return limitedUser;
+        } else {
+            return null;
+        }
+    }
 }
