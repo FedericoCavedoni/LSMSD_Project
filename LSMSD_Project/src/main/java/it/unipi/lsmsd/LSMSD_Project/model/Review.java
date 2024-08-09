@@ -19,7 +19,7 @@ public class Review {
     @Field(name = "rating")
     private float rating;
 
-    @Field(name = "review Text")
+    @Field(name = "review text")
     private String reviewText;
 
     @Id
