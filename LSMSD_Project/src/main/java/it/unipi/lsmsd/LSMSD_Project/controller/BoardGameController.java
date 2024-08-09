@@ -59,4 +59,14 @@ public class BoardGameController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/details")
+    public ResponseEntity<BoardGame> getBoardGameDetails(@RequestParam String name) {
+        BoardGame boardGame = boardGameService.getBoardGameDetailsWithReviews(name);
+        if (boardGame != null) {
+            return ResponseEntity.ok(boardGame);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

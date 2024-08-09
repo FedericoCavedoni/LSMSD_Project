@@ -52,4 +52,7 @@ public class BoardGame {
 
     @Field(name = "boardgameartist")
     private List<String> artists;
+
+    @Field(name = "reviews")
+    private List<Review> reviews;
 }

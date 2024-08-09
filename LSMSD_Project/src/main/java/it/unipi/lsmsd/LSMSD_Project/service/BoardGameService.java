@@ -5,6 +5,7 @@ import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGameNode;
 import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameNodeRepository;
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
+import it.unipi.lsmsd.LSMSD_Project.model.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,7 @@ public class BoardGameService {
             existingBoardGame.setMechanics(updatedBoardGame.getMechanics());
             existingBoardGame.setDesigners(updatedBoardGame.getDesigners());
             existingBoardGame.setArtists(updatedBoardGame.getArtists());
+            existingBoardGame.setReviews(updatedBoardGame.getReviews());
 
             BoardGame savedBoardGame = boardGameRepository.save(existingBoardGame);
 
@@ -83,6 +85,18 @@ public class BoardGameService {
 
     public List<Relation> getBoardGameRelationships(String boardGameName, String relation, int num) {
         return boardGameNodeRepository.findBoardGameRelationships(boardGameName, relation, num);
+    }
+
+    public BoardGame getBoardGameDetailsWithReviews(String name) {
+        BoardGame boardGame = boardGameRepository.findByName(name);
+        if (boardGame != null && boardGame.getReviews() != null) {
+            // Limitare il numero di recensioni a 5
+            List<Review> limitedReviews = boardGame.getReviews().stream()
+                    .limit(5)
+                    .toList();
+            boardGame.setReviews(limitedReviews);
+        }
+        return boardGame;
     }
 
 }
