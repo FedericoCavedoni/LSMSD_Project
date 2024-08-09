@@ -90,9 +90,8 @@ public class BoardGameService {
     public BoardGame getBoardGameDetailsWithReviews(String name) {
         BoardGame boardGame = boardGameRepository.findByName(name);
         if (boardGame != null && boardGame.getReviews() != null) {
-            // Limitare il numero di recensioni a 5
             List<Review> limitedReviews = boardGame.getReviews().stream()
-                    .limit(5)
+                    .limit(10)
                     .toList();
             boardGame.setReviews(limitedReviews);
         }
