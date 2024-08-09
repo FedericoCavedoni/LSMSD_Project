@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardGameService {
@@ -96,6 +97,22 @@ public class BoardGameService {
             boardGame.setReviews(limitedReviews);
         }
         return boardGame;
+    }
+
+    public List<BoardGame> getLimitedBoardGames(int limit) {
+        return boardGameRepository.findAll().stream()
+                .map(game -> {
+                    BoardGame limitedGame = new BoardGame();
+                    limitedGame.setName(game.getName());
+                    limitedGame.setCategory(game.getCategory());
+                    limitedGame.setMinPlayers(game.getMinPlayers());
+                    limitedGame.setMaxPlayers(game.getMaxPlayers());
+                    limitedGame.setRating(game.getRating());
+                    limitedGame.setPlayingTime(game.getPlayingTime());
+                    return limitedGame;
+                })
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 
 }

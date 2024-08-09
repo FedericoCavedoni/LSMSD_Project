@@ -69,4 +69,12 @@ public class BoardGameController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/limited")
+    public ResponseEntity<List<BoardGame>> getLimitedBoardGames(@RequestParam int limit) {
+        List<BoardGame> boardGames = boardGameService.getLimitedBoardGames(limit);
+        return ResponseEntity.ok(boardGames);
+    }
+
+
 }
