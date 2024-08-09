@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import it.unipi.lsmsd.LSMSD_Project.utils.UserAlreadyExistsException;
+import it.unipi.lsmsd.LSMSD_Project.utils.InvalidCredentialsException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
@@ -37,6 +38,15 @@ public class UserService {
 
         return savedUser;
     }
+    public User authenticate(String username, String password) throws InvalidCredentialsException {
+        User user = userRepository.findByUsername(username);
+        if (user != null && password != null && BCrypt.checkpw(password, user.getPassword())) {
+            return user;
+        } else {
+            throw new InvalidCredentialsException("Invalid username or password");
+        }
+    }
+
 
     public List<User> getAllUsers(int n) {
         return userRepository.findAll(PageRequest.of(0, n)).getContent();
