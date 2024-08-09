@@ -75,6 +75,7 @@ public class UserController {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
         }
     }
+    @GetMapping("/logout")
     public ResponseEntity<String> logoutUser(HttpSession session) {
         session.invalidate(); // Invalida la sessione corrente
         return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
