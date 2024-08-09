@@ -21,22 +21,22 @@ public class User {
     private String username;
 
     @Field(name = "nome")
-    private String Nome;
+    private String nome;
 
     @Field(name = "cognome")
-    private String Cognome;
+    private String cognome;
 
     @Field(name = "email")
-    private String Email;
+    private String email;
 
     @Field(name = "numero di telefono")
-    private String Numero;
+    private String numero;
 
     @Field(name = "password")
-    private String Password;
+    private String password;
 
     @Field(name = "data di nascita")
-    private String DataNascita;
+    private String dataNascita;
 
     @Field(name = "library")
     private List<String> library;
