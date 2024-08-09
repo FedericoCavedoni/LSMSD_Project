@@ -2,6 +2,7 @@ package it.unipi.lsmsd.LSMSD_Project.service;
 
 import it.unipi.lsmsd.LSMSD_Project.dao.UserRepository;
 import it.unipi.lsmsd.LSMSD_Project.dao.UserNodeRepository;
+import it.unipi.lsmsd.LSMSD_Project.dto.UserDto;
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.model.UserNode;
@@ -70,5 +71,17 @@ public class UserService {
         } else {
             return null;
         }
+    }
+
+    public UserDto convertToDTO(User user) {
+        UserDto dto = new UserDto();
+        dto.setUsername(user.getUsername());
+        dto.setNome(user.getNome());
+        dto.setCognome(user.getCognome());
+        dto.setEmail(user.getEmail());
+        dto.setNumero(user.getNumero());
+        dto.setDataNascita(user.getDataNascita());
+        dto.setLibrary(user.getLibrary());
+        return dto;
     }
 }

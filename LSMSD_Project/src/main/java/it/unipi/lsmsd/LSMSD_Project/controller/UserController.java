@@ -1,5 +1,6 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
+import it.unipi.lsmsd.LSMSD_Project.dto.UserDto;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.service.UserService;
 import it.unipi.lsmsd.LSMSD_Project.utils.UserAlreadyExistsException;
@@ -70,6 +71,7 @@ public class UserController {
     public ResponseEntity<?> getCurrentUser(HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser != null) {
+            UserDto userDTO = userService.convertToDTO(currentUser);
             return new ResponseEntity<>(currentUser, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
