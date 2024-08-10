@@ -86,7 +86,7 @@ public class UserService {
         return dto;
     }
 
-<<<<<<< HEAD
+
     @Transactional
     public void deleteUserByUsername(String username) {
         // Elimina l'utente da MongoDB
@@ -99,7 +99,7 @@ public class UserService {
 
 
 
-=======
+
     public User updateUserProfile(User updatedUser, String username) {
         User existingUser = userRepository.findByUsername(username);
         if (existingUser != null) {
@@ -116,5 +116,5 @@ public class UserService {
             return null;
         }
     }
->>>>>>> dabd27379262cac2c59a57a50f9fbd19360eed0c
+
 }
