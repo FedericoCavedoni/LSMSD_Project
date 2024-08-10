@@ -86,6 +86,7 @@ public class UserService {
         return dto;
     }
 
+<<<<<<< HEAD
     @Transactional
     public void deleteUserByUsername(String username) {
         // Elimina l'utente da MongoDB
@@ -98,4 +99,22 @@ public class UserService {
 
 
 
+=======
+    public User updateUserProfile(User updatedUser, String username) {
+        User existingUser = userRepository.findByUsername(username);
+        if (existingUser != null) {
+
+            existingUser.setNome(updatedUser.getNome());
+            existingUser.setCognome(updatedUser.getCognome());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setNumero(updatedUser.getNumero());
+            existingUser.setDataNascita(updatedUser.getDataNascita());
+            existingUser.setLibrary(updatedUser.getLibrary());
+
+            return userRepository.save(existingUser);
+        } else {
+            return null;
+        }
+    }
+>>>>>>> dabd27379262cac2c59a57a50f9fbd19360eed0c
 }
