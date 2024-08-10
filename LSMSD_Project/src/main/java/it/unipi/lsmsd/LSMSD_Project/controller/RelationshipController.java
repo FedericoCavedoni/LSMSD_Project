@@ -52,28 +52,6 @@ public class RelationshipController {
         }
     }
 
-    @PostMapping("/addReview")
-    public void reviewBoardGame(@RequestParam String username, @RequestParam String boardGameName) {
-        try {
-            relationshipService.reviewBoardGame(username, boardGameName);
-        } catch (ResponseStatusException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
-        }
-    }
-
-    @PostMapping("/addLibrary")
-    public void addToLibrary(@RequestParam String username, @RequestParam String boardGameName) {
-        try {
-            relationshipService.addToLibrary(username, boardGameName);
-        } catch (ResponseStatusException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
-        }
-    }
-
     @GetMapping("/find")
     public ResponseEntity<Relation> findRelationship(
             @RequestParam String firstNode,

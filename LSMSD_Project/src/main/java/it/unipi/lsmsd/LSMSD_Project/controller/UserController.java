@@ -1,6 +1,5 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
-import it.unipi.lsmsd.LSMSD_Project.dto.UserDto;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.service.UserService;
 import it.unipi.lsmsd.LSMSD_Project.utils.UserAlreadyExistsException;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 
 import java.util.List;
@@ -71,7 +68,6 @@ public class UserController {
     public ResponseEntity<?> getCurrentUser(HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser != null) {
-            UserDto userDTO = userService.convertToDTO(currentUser);
             return new ResponseEntity<>(currentUser, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
@@ -127,6 +123,16 @@ public class UserController {
             }
         } else {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping("/library")
+    public ResponseEntity<?> getUserLibrary(@RequestParam String username) {
+        List<String> library = userService.getUserLibrary(username);
+        if (library != null) {
+            return new ResponseEntity<>(library, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("User not found or library is empty", HttpStatus.NOT_FOUND);
         }
     }
 }

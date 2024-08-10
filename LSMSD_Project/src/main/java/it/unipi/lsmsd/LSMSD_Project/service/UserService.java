@@ -2,7 +2,6 @@ package it.unipi.lsmsd.LSMSD_Project.service;
 
 import it.unipi.lsmsd.LSMSD_Project.dao.UserRepository;
 import it.unipi.lsmsd.LSMSD_Project.dao.UserNodeRepository;
-import it.unipi.lsmsd.LSMSD_Project.dto.UserDto;
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.model.UserNode;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserService {
@@ -74,31 +72,11 @@ public class UserService {
         }
     }
 
-    public UserDto convertToDTO(User user) {
-        UserDto dto = new UserDto();
-        dto.setUsername(user.getUsername());
-        dto.setNome(user.getNome());
-        dto.setCognome(user.getCognome());
-        dto.setEmail(user.getEmail());
-        dto.setNumero(user.getNumero());
-        dto.setDataNascita(user.getDataNascita());
-        dto.setLibrary(user.getLibrary());
-        return dto;
-    }
-
-
     @Transactional
     public void deleteUserByUsername(String username) {
-        // Elimina l'utente da MongoDB
         userRepository.deleteByUsername(username);
-
-        // Elimina l'utente da Neo4j
-         userNodeRepository.deleteByUsername(username);
+        userNodeRepository.deleteByUsername(username);
     }
-
-
-
-
 
     public User updateUserProfile(User updatedUser, String username) {
         User existingUser = userRepository.findByUsername(username);
@@ -115,6 +93,14 @@ public class UserService {
         } else {
             return null;
         }
+    }
+
+    public List<String> getUserLibrary(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            return user.getLibrary();
+        }
+        return null;
     }
 
 }

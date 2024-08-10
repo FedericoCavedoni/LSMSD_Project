@@ -40,4 +40,7 @@ public class User {
 
     @Field(name = "library")
     private List<String> library;
+
+    @Field(name = "isAdmin")
+    private boolean isAdmin;
 }

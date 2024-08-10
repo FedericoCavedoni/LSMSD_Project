@@ -58,34 +58,6 @@ public class RelationshipService {
                 .run();
     }
 
-    @Transactional
-    public void reviewBoardGame(String username, String boardGameName) {
-
-        if (userNotExists(username) || boardGameNotExists(boardGameName)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User or BoardGame not found");
-        }
-
-        neo4jClient.query("MATCH (u:User {username: $username}), (b:BoardGame {name: $boardGameName}) " +
-                        "MERGE (u)-[:REVIEWED]->(b)")
-                .bind(username).to("username")
-                .bind(boardGameName).to("boardGameName")
-                .run();
-    }
-
-    @Transactional
-    public void addToLibrary(String username, String boardGameName) {
-
-        if (userNotExists(username) || boardGameNotExists(boardGameName)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User or BoardGame not found");
-        }
-
-        neo4jClient.query("MATCH (u:User {username: $username}), (b:BoardGame {name: $boardGameName}) " +
-                        "MERGE (u)-[:ADDED_TO_LIBRARY]->(b)")
-                .bind(username).to("username")
-                .bind(boardGameName).to("boardGameName")
-                .run();
-    }
-
     boolean userNotExists(String username){
         System.out.print(username);
         return neo4jClient.query("MATCH (u:User {username: $username}) RETURN u")
