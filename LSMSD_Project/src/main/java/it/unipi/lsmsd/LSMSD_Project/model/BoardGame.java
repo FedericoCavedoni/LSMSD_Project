@@ -17,7 +17,7 @@ public class BoardGame {
     @Id
     private String id;
 
-    @Field(name = "name")
+    @Field(name = "Name")
     private String name;
 
     @Field(name = "description")
@@ -29,7 +29,7 @@ public class BoardGame {
     @Field(name = "rating")
     private float rating;
 
-    @Field(name = "year")
+    @Field(name = "Year")
     private int year;
 
     @Field(name = "minplayers")

@@ -83,7 +83,17 @@ public class UserController {
         session.invalidate(); // Invalida la sessione corrente
         return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
     }
-
+    @DeleteMapping("/deleteAccount")
+    public ResponseEntity<String> deleteOwnAccount(HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser != null) {
+            userService.deleteUserByUsername(currentUser.getUsername());
+            session.invalidate(); // Invalida la sessione dopo l'eliminazione
+            return ResponseEntity.ok("Account eliminato con successo.");
+        } else {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+    }
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<String> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);

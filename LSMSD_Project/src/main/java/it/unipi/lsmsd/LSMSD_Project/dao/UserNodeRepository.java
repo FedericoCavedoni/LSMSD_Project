@@ -18,4 +18,5 @@ public interface UserNodeRepository extends Neo4jRepository<UserNode, String> {
             "CASE WHEN n:User THEN n.username ELSE n.name END AS secondNode " +
             "LIMIT $limit")
     List<Relation> findUserRelationships(String username, String relation, int limit);
+    void deleteByUsername(String username);
 }

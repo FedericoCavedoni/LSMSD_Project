@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import it.unipi.lsmsd.LSMSD_Project.utils.UserAlreadyExistsException;
 import it.unipi.lsmsd.LSMSD_Project.utils.InvalidCredentialsException;
+import org.springframework.transaction.annotation.Transactional;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
@@ -84,4 +85,17 @@ public class UserService {
         dto.setLibrary(user.getLibrary());
         return dto;
     }
+
+    @Transactional
+    public void deleteUserByUsername(String username) {
+        // Elimina l'utente da MongoDB
+        userRepository.deleteByUsername(username);
+
+        // Elimina l'utente da Neo4j
+         userNodeRepository.deleteByUsername(username);
+    }
+
+
+
+
 }
