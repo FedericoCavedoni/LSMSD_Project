@@ -103,5 +103,21 @@ public class UserController {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
     }
+
+    @PutMapping("/profile/update")
+    public ResponseEntity<?> updateUserProfile(HttpSession session, @RequestBody User updatedUser) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser != null) {
+            User user = userService.updateUserProfile(updatedUser, currentUser.getUsername());
+            if (user != null) {
+                session.setAttribute("user", user);
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+    }
 }
 

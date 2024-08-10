@@ -84,4 +84,21 @@ public class UserService {
         dto.setLibrary(user.getLibrary());
         return dto;
     }
+
+    public User updateUserProfile(User updatedUser, String username) {
+        User existingUser = userRepository.findByUsername(username);
+        if (existingUser != null) {
+
+            existingUser.setNome(updatedUser.getNome());
+            existingUser.setCognome(updatedUser.getCognome());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setNumero(updatedUser.getNumero());
+            existingUser.setDataNascita(updatedUser.getDataNascita());
+            existingUser.setLibrary(updatedUser.getLibrary());
+
+            return userRepository.save(existingUser);
+        } else {
+            return null;
+        }
+    }
 }
