@@ -1,7 +1,7 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
-import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import it.unipi.lsmsd.LSMSD_Project.model.FollowedUser;
+import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import it.unipi.lsmsd.LSMSD_Project.service.RelationshipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,6 @@ public class RelationshipController {
     @Autowired
     private RelationshipService relationshipService;
 
-
     @GetMapping("/user")
     public ResponseEntity<List<Relation>> getUserRelationships(@RequestParam String username, @RequestParam(required = false) String relation, @RequestParam int n) {
         List<Relation> relationships = relationshipService.getUserRelationships(username, relation, n);
@@ -26,15 +25,16 @@ public class RelationshipController {
     }
 
     @GetMapping("/boardgame")
-    public ResponseEntity<List<Relation>> getBoardGameRelationships(@RequestParam String name,  @RequestParam(required = false) String relation, @RequestParam int n) {
+    public ResponseEntity<List<Relation>> getBoardGameRelationships(@RequestParam String name, @RequestParam(required = false) String relation, @RequestParam int n) {
         List<Relation> relationships = relationshipService.getBoardGameRelationships(name, relation, n);
         return ResponseEntity.ok(relationships);
     }
 
     @PostMapping("/addFollow")
-    public void followUser(@RequestParam String follower, @RequestParam String followee) {
+    public ResponseEntity<Void> followUser(@RequestParam String follower, @RequestParam String followee) {
         try {
             relationshipService.followUser(follower, followee);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (ResponseStatusException e) {
             throw e;
         } catch (Exception e) {
@@ -43,9 +43,10 @@ public class RelationshipController {
     }
 
     @PostMapping("/addLike")
-    public void likeBoardGame(@RequestParam String username, @RequestParam String boardGameName) {
+    public ResponseEntity<Void> likeBoardGame(@RequestParam String username, @RequestParam String boardGameName) {
         try {
             relationshipService.likeBoardGame(username, boardGameName);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (ResponseStatusException e) {
             throw e;
         } catch (Exception e) {
@@ -85,6 +86,16 @@ public class RelationshipController {
     public ResponseEntity<List<FollowedUser>> getFollowedUsersAndLikedGames(@RequestParam String username, @RequestParam int n) {
         try {
             List<FollowedUser> followedUsers = relationshipService.getFollowedUsersAndLikedGames(username, n);
+            return new ResponseEntity<>(followedUsers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/followed")
+    public ResponseEntity<List<FollowedUser>> getFollowed(@RequestParam String username, @RequestParam int n) {
+        try {
+            List<FollowedUser> followedUsers = relationshipService.getFollowed(username, n);
             return new ResponseEntity<>(followedUsers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

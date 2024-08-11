@@ -1,7 +1,7 @@
 package it.unipi.lsmsd.LSMSD_Project.service;
 
-import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import it.unipi.lsmsd.LSMSD_Project.model.FollowedUser;
+import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,6 @@ public class RelationshipService {
 
     @Transactional
     public void followUser(String followerUsername, String followeeUsername) {
-
         if (userNotExists(followerUsername) || userNotExists(followeeUsername)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
@@ -50,7 +49,6 @@ public class RelationshipService {
 
     @Transactional
     public void likeBoardGame(String username, String boardGameName) {
-
         if (userNotExists(username) || boardGameNotExists(boardGameName)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User or BoardGame not found");
         }
@@ -62,8 +60,7 @@ public class RelationshipService {
                 .run();
     }
 
-    boolean userNotExists(String username){
-        System.out.print(username);
+    boolean userNotExists(String username) {
         return neo4jClient.query("MATCH (u:User {username: $username}) RETURN u")
                 .bind(username).to("username")
                 .fetch()
@@ -71,13 +68,12 @@ public class RelationshipService {
                 .isEmpty();
     }
 
-    boolean boardGameNotExists(String boardGameName){
+    boolean boardGameNotExists(String boardGameName) {
         return neo4jClient.query("MATCH (b:BoardGame {name: $name}) RETURN b")
                 .bind(boardGameName).to("name")
                 .fetch()
                 .one()
                 .isEmpty();
-
     }
 
     @Transactional
@@ -104,7 +100,6 @@ public class RelationshipService {
                 })
                 .one()
                 .orElse(null);
-
     }
 
     @Transactional
@@ -137,11 +132,33 @@ public class RelationshipService {
         for (Map<String, Object> record : result) {
             String followedUsername = (String) record.get("followedUser");
             List<String> likedGames = (List<String>) record.get("likedGames");
-            followedUsers.add(new FollowedUser(followedUsername, likedGames));
+            followedUsers.add(new FollowedUser(followedUsername, likedGames, null));
         }
 
         return followedUsers;
     }
+
+    @Transactional
+    public List<FollowedUser> getFollowed(String username, int n) {
+        String query = "MATCH (u:User {username: $username})-[:FOLLOWED]->(followed:User) " +
+                "OPTIONAL MATCH (followed)-[:FOLLOWED]->(follower:User) " +
+                "RETURN followed.username AS followedUser, collect(follower.username) AS followedUsers " +
+                "LIMIT $n";
+
+        Collection<Map<String, Object>> result = neo4jClient.query(query)
+                .bind(username).to("username")
+                .bind(n).to("n")
+                .fetch()
+                .all();
+
+        List<FollowedUser> followedUsersList = new ArrayList<>();
+
+        for (Map<String, Object> record : result) {
+            String followedUser = (String) record.get("followedUser");
+            List<String> followedUsers = (List<String>) record.get("followedUsers");
+            followedUsersList.add(new FollowedUser(followedUser, null, followedUsers));
+        }
+
+        return followedUsersList;
+    }
 }
-
-
