@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Node
+@NodeEntity(label = "User")
 public class UserNode {
     @Id
     private String username;
