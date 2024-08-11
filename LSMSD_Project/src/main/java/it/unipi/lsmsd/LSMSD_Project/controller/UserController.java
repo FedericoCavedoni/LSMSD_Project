@@ -95,6 +95,12 @@ public class UserController {
         } else {
             // Un admin sta cercando di eliminare l'account di un altro utente
             if (currentUser.isAdmin()) {
+                // Verifica se l'utente esiste prima di procedere con l'eliminazione
+                User userToDelete = userService.findByUsername(username);
+                if (userToDelete == null) {
+                    return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+                }
+
                 userService.deleteUserByUsername(username);
                 return ResponseEntity.ok("Account eliminato con successo.");
             } else {
