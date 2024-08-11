@@ -101,4 +101,23 @@ public class RelationshipController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/topFollowedUsers")
+    public ResponseEntity<List<String>> getTopFollowedUsers(@RequestParam String username, @RequestParam int n) {
+        try {
+            List<String> followedUsers = relationshipService.getTopFollowedUsers(username, n);
+            return new ResponseEntity<>(followedUsers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/topBoardGames")
+    public ResponseEntity<List<String>> getTopBoardGames(@RequestParam String username, @RequestParam int n) {
+        try {
+            List<String> boardGames = relationshipService.getTopBoardGamesForUser(username, n);
+            return new ResponseEntity<>(boardGames, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

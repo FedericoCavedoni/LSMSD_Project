@@ -161,4 +161,50 @@ public class RelationshipService {
 
         return followedUsersList;
     }
+
+
+    @Transactional
+    public List<String> getTopBoardGamesForUser(String username, int n) {
+        String query = "MATCH (u:User {username: $username})-[:FOLLOWED]->(followed:User)-[:LIKED]->(b:BoardGame) " +
+                "RETURN b.name AS boardGame, count(b) AS likeCount " +
+                "ORDER BY likeCount DESC " +
+                "LIMIT $n";
+
+        Collection<Map<String, Object>> result = neo4jClient.query(query)
+                .bind(username).to("username")
+                .bind(n).to("n")
+                .fetch()
+                .all();
+
+        List<String> boardGames = new ArrayList<>();
+
+        for (Map<String, Object> record : result) {
+            String boardGame = (String) record.get("boardGame");
+            boardGames.add(boardGame);
+        }
+
+        return boardGames;
+    }
+    @Transactional
+    public List<String> getTopFollowedUsers(String username, int n) {
+        String query = "MATCH (u:User {username: $username})-[:FOLLOWED]->(followed:User)-[:FOLLOWED]->(target:User) " +
+                "RETURN target.username AS followedUser, count(target) AS followCount " +
+                "ORDER BY followCount DESC " +
+                "LIMIT $n";
+
+        Collection<Map<String, Object>> result = neo4jClient.query(query)
+                .bind(username).to("username")
+                .bind(n).to("n")
+                .fetch()
+                .all();
+
+        List<String> followedUsers = new ArrayList<>();
+
+        for (Map<String, Object> record : result) {
+            String followedUser = (String) record.get("followedUser");
+            followedUsers.add(followedUser);
+        }
+
+        return followedUsers;
+    }
 }
