@@ -1,11 +1,14 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
+import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.service.BoardGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
+import org.springframework.http.HttpStatus;
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/boardgames")
@@ -31,32 +34,48 @@ public class BoardGameController {
     }
 
     @PutMapping("/updateBoardGame")
-    public ResponseEntity<BoardGame> updateBoardGame(@RequestBody BoardGame updatedBoardGame) {
+    public ResponseEntity<?> updateBoardGame(@RequestBody BoardGame updatedBoardGame, HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser != null && currentUser.isAdmin()) {
         BoardGame boardGame = boardGameService.updateBoardGame(updatedBoardGame.getName(), updatedBoardGame);
         if (boardGame != null) {
             return ResponseEntity.ok(boardGame);
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @PostMapping("/addBoardGame")
-    public ResponseEntity<BoardGame> addBoardGame(@RequestBody BoardGame boardGame) {
-        BoardGame newBoardGame = boardGameService.addBoardGame(boardGame);
-        if (newBoardGame != null) {
-            return ResponseEntity.ok(newBoardGame);
         } else {
-            return ResponseEntity.status(409).body(null);
+            return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
         }
     }
 
+    @PostMapping("/addBoardGame")
+    public ResponseEntity<?> addBoardGame(@RequestBody BoardGame boardGame, HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser != null && currentUser.isAdmin()) {
+            BoardGame newBoardGame = boardGameService.addBoardGame(boardGame);
+            if (newBoardGame != null) {
+                return ResponseEntity.ok(newBoardGame);
+            } else {
+                return ResponseEntity.status(409).body(null);
+            }
+        } else {
+            return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
+        }
+
+    }
+
     @DeleteMapping("/deleteBoardGame")
-    public ResponseEntity<Void> deleteBoardGame(@RequestParam String name) {
+    public ResponseEntity<?> deleteBoardGame(@RequestParam String name, HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser != null && currentUser.isAdmin()) {
         boolean deleted = boardGameService.deleteBoardGameByName(name);
         if (deleted) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
+        }
+        } else {
+            return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
         }
     }
 
