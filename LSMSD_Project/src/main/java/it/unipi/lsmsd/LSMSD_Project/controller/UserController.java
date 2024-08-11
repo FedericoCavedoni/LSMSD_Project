@@ -80,16 +80,29 @@ public class UserController {
         return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
     }
     @DeleteMapping("/deleteAccount")
-    public ResponseEntity<String> deleteOwnAccount(HttpSession session) {
+    public ResponseEntity<String> deleteAccount(@RequestParam(required = false) String username, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
-        if (currentUser != null) {
+
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (username == null) {
+            // L'utente sta cercando di eliminare il proprio account
             userService.deleteUserByUsername(currentUser.getUsername());
             session.invalidate(); // Invalida la sessione dopo l'eliminazione
             return ResponseEntity.ok("Account eliminato con successo.");
         } else {
-            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+            // Un admin sta cercando di eliminare l'account di un altro utente
+            if (currentUser.isAdmin()) {
+                userService.deleteUserByUsername(username);
+                return ResponseEntity.ok("Account eliminato con successo.");
+            } else {
+                return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
+            }
         }
     }
+
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<String> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
