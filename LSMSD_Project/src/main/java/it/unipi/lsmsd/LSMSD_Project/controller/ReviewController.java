@@ -3,6 +3,7 @@ package it.unipi.lsmsd.LSMSD_Project.controller;
 import it.unipi.lsmsd.LSMSD_Project.model.Review;
 import it.unipi.lsmsd.LSMSD_Project.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
@@ -69,6 +70,16 @@ public class ReviewController {
             return ResponseEntity.status(500).body(null);
         } else {
             return ResponseEntity.ok(reviews.get(0));
+        }
+    }
+
+    @GetMapping("/recent")
+    public ResponseEntity<List<Review>> getRecentReviews(@RequestParam String game, int num) {
+        try {
+            List<Review> recentReviews = reviewService.getRecentReviews(game, num);
+            return new ResponseEntity<>(recentReviews, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
