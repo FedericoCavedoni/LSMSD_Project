@@ -1,6 +1,7 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
+import it.unipi.lsmsd.LSMSD_Project.model.FollowedUser;
 import it.unipi.lsmsd.LSMSD_Project.service.RelationshipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -77,6 +78,16 @@ public class RelationshipController {
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/followedAndLikedGames")
+    public ResponseEntity<List<FollowedUser>> getFollowedUsersAndLikedGames(@RequestParam String username, @RequestParam int n) {
+        try {
+            List<FollowedUser> followedUsers = relationshipService.getFollowedUsersAndLikedGames(username, n);
+            return new ResponseEntity<>(followedUsers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

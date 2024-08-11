@@ -1,6 +1,7 @@
 package it.unipi.lsmsd.LSMSD_Project.service;
 
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
+import it.unipi.lsmsd.LSMSD_Project.model.FollowedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.stereotype.Service;
@@ -8,7 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RelationshipService {
@@ -114,6 +118,29 @@ public class RelationshipService {
                 .bind(firstNode).to("firstNode")
                 .bind(secondNode).to("secondNode")
                 .run();
+    }
+
+    public List<FollowedUser> getFollowedUsersAndLikedGames(String username, int n) {
+        String query = "MATCH (u:User {username: $username})-[:FOLLOWED]->(follower:User) " +
+                "OPTIONAL MATCH (follower)-[:LIKED]-(b:BoardGame) " +
+                "RETURN follower.username AS followedUser, collect(b.name) AS likedGames " +
+                "LIMIT $n";
+
+        Collection<Map<String, Object>> result = neo4jClient.query(query)
+                .bind(username).to("username")
+                .bind(n).to("n")
+                .fetch()
+                .all();
+
+        List<FollowedUser> followedUsers = new ArrayList<>();
+
+        for (Map<String, Object> record : result) {
+            String followedUsername = (String) record.get("followedUser");
+            List<String> likedGames = (List<String>) record.get("likedGames");
+            followedUsers.add(new FollowedUser(followedUsername, likedGames));
+        }
+
+        return followedUsers;
     }
 }
 
