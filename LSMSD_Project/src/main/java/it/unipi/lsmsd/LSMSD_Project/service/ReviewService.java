@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -64,6 +65,54 @@ public class ReviewService {
         query.addCriteria(Criteria.where("game").is(game));
         query.with(Sort.by(Sort.Direction.DESC, "date"));
         query.limit(limit);
+
+        return mongoTemplate.find(query, Review.class);
+    }
+
+    public List<Review> getFilteredReviews(String game, Integer minRating, Integer maxRating, Integer limit) {
+        Query query = new Query();
+
+        if (StringUtils.hasText(game)) {
+            query.addCriteria(Criteria.where("game").is(game));
+        }
+
+        if (minRating != null && maxRating != null) {
+            query.addCriteria(Criteria.where("rating").gte(minRating).lte(maxRating));
+        } else if (minRating != null) {
+            query.addCriteria(Criteria.where("rating").gte(minRating));
+        } else if (maxRating != null) {
+            query.addCriteria(Criteria.where("rating").lte(maxRating));
+        }
+
+        query.with(Sort.by(Sort.Direction.DESC, "date"));
+
+        if (limit != null && limit > 0) {
+            query.limit(limit);
+        }
+
+        return mongoTemplate.find(query, Review.class);
+    }
+
+    public List<Review> getTopNReviews(String game, int n) {
+        Query query = new Query();
+
+        query.addCriteria(Criteria.where("game").is(game));
+
+        query.with(Sort.by(Sort.Direction.DESC, "rating"));
+
+        query.limit(n);
+
+        return mongoTemplate.find(query, Review.class);
+    }
+
+    public List<Review> getLowestNReviews(String game, int n) {
+        Query query = new Query();
+
+        query.addCriteria(Criteria.where("game").is(game));
+
+        query.with(Sort.by(Sort.Direction.ASC, "rating"));
+
+        query.limit(n);
 
         return mongoTemplate.find(query, Review.class);
     }

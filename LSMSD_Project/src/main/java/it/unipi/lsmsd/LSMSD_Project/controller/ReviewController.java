@@ -111,4 +111,39 @@ public class ReviewController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/filtered")
+    public ResponseEntity<List<Review>> getFilteredReviews(
+            @RequestParam(required = false) String game,
+            @RequestParam(required = false) Integer minRating,
+            @RequestParam(required = false) Integer maxRating,
+            @RequestParam(required = false) Integer limit) {
+
+        List<Review> reviews = reviewService.getFilteredReviews(game, minRating, maxRating, limit);
+
+        if (reviews.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(reviews);
+    }
+
+    @GetMapping("/top-or-lowest")
+    public ResponseEntity<List<Review>> getTopOrLowestNReviews(
+            @RequestParam String game,
+            @RequestParam int n,
+            @RequestParam(defaultValue = "true") boolean highest) {
+
+        List<Review> reviews;
+
+        if (highest) {
+            reviews = reviewService.getTopNReviews(game, n);
+        } else {
+            reviews = reviewService.getLowestNReviews(game, n);
+        }
+
+        if (reviews.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(reviews);
+    }
 }
