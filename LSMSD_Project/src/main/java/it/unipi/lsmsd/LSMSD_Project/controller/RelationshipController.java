@@ -2,7 +2,9 @@ package it.unipi.lsmsd.LSMSD_Project.controller;
 
 import it.unipi.lsmsd.LSMSD_Project.model.FollowedUser;
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
+import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.service.RelationshipService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +33,13 @@ public class RelationshipController {
     }
 
     @PostMapping("/addFollow")
-    public ResponseEntity<Void> followUser(@RequestParam String follower, @RequestParam String followee) {
+    public ResponseEntity<?> followUser(@RequestParam String followee,HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
         try {
-            relationshipService.followUser(follower, followee);
+            relationshipService.followUser(currentUser.getUsername(), followee);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (ResponseStatusException e) {
             throw e;
@@ -43,9 +49,13 @@ public class RelationshipController {
     }
 
     @PostMapping("/addLike")
-    public ResponseEntity<Void> likeBoardGame(@RequestParam String username, @RequestParam String boardGameName) {
+    public ResponseEntity<?> likeBoardGame(@RequestParam String boardGameName,HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
         try {
-            relationshipService.likeBoardGame(username, boardGameName);
+            relationshipService.likeBoardGame(currentUser.getUsername(), boardGameName);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (ResponseStatusException e) {
             throw e;
@@ -70,7 +80,7 @@ public class RelationshipController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteRelationship(
-            @RequestParam String firstNode,
+            @RequestParam(required = false) String firstNode,
             @RequestParam String relationType,
             @RequestParam String secondNode) {
 
