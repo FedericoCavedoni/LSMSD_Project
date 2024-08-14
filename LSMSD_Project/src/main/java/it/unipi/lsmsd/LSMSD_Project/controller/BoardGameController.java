@@ -102,6 +102,14 @@ public class BoardGameController {
         return ResponseEntity.ok(boardGames);
     }
 
+    @GetMapping("/filterByCategories")
+    public ResponseEntity<List<BoardGameLimitedProjection>> getBoardGamesByCategories(@RequestParam List<String> categories) {
+        List<BoardGameLimitedProjection> boardGames = boardGameService.getBoardGamesByCategories(categories);
+        return ResponseEntity.ok(boardGames);
+    }
+
+
+
 
 
 }

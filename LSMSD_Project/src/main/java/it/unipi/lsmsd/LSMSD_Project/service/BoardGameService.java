@@ -108,5 +108,11 @@ public class BoardGameService {
         return boardGameRepository.findBoardGamesWithRatingGreaterThanEqual(rating);
     }
 
+    public List<BoardGameLimitedProjection> getBoardGamesByCategories(List<String> categories) {
+        return boardGameRepository.findBoardGamesByCategories(categories);
+    }
+
+
+
 
 }

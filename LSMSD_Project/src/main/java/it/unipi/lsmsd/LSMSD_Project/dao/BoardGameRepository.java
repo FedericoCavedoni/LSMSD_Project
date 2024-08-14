@@ -18,6 +18,11 @@ public interface BoardGameRepository extends MongoRepository<BoardGame, String> 
     @Query(value = "{ 'rating' : { $gte: ?0 } }", fields = "{ 'name' : 1, 'category' : 1, 'minPlayers' : 1, 'maxPlayers' : 1, 'rating' : 1, 'playingTime' : 1, 'reviews.text' : 1 }")
     List<BoardGameLimitedProjection> findBoardGamesWithRatingGreaterThanEqual(float rating);
 
+    @Query(value = "{ 'boardgamecategory' : { $in: ?0 } }", fields = "{ 'name' : 1, 'category' : 1, 'minPlayers' : 1, 'maxPlayers' : 1, 'rating' : 1, 'playingTime' : 1, 'reviews.text' : 1 }")
+    List<BoardGameLimitedProjection> findBoardGamesByCategories(List<String> categories);
+
+
+
 }
 
 
