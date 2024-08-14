@@ -1,9 +1,6 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
-import it.unipi.lsmsd.LSMSD_Project.model.GameStatistic;
-import it.unipi.lsmsd.LSMSD_Project.model.Match;
-import it.unipi.lsmsd.LSMSD_Project.model.User;
-import it.unipi.lsmsd.LSMSD_Project.model.UserGameStatistic;
+import it.unipi.lsmsd.LSMSD_Project.model.*;
 import it.unipi.lsmsd.LSMSD_Project.service.MatchService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,9 +97,28 @@ public class MatchController {
             @RequestParam(required = false) Boolean ascending,
             HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
+        //if(true){
+        if (currentUser != null && currentUser.isAdmin()) {
+            List<UserGameStatistic> statistics = matchService.getUserGameStatistics(n, ascending);
+            if (!statistics.isEmpty()) {
+                return ResponseEntity.ok(statistics);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping("/topPlayers")
+    public ResponseEntity<?> getTopPlayersForEachGame(
+            @RequestParam(required = false) Integer limit,
+            @RequestParam(required = false) Integer minMatches,
+            HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
         if(true){
         //if (currentUser != null && currentUser.isAdmin()) {
-            List<UserGameStatistic> statistics = matchService.getUserGameStatistics(n, ascending);
+            List<TopPlayerStatistic> statistics = matchService.getTopPlayersForEachGame(limit, minMatches);
             if (!statistics.isEmpty()) {
                 return ResponseEntity.ok(statistics);
             } else {
