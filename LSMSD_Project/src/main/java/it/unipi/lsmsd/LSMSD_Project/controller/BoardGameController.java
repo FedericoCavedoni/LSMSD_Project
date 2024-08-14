@@ -108,6 +108,12 @@ public class BoardGameController {
         return ResponseEntity.ok(boardGames);
     }
 
+    @GetMapping("/filterByMechanics")
+    public ResponseEntity<List<BoardGameLimitedProjection>> getBoardGamesByMechanics(@RequestParam List<String> mechanics) {
+        List<BoardGameLimitedProjection> boardGames = boardGameService.getBoardGamesByMechanics(mechanics);
+        return ResponseEntity.ok(boardGames);
+    }
+
 
 
 

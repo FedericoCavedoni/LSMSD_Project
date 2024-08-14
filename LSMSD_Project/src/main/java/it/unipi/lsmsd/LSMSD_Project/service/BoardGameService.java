@@ -112,6 +112,10 @@ public class BoardGameService {
         return boardGameRepository.findBoardGamesByCategories(categories);
     }
 
+    public List<BoardGameLimitedProjection> getBoardGamesByMechanics(List<String> mechanics) {
+        return boardGameRepository.findBoardGamesByMechanics(mechanics);
+    }
+
 
 
 
