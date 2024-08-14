@@ -17,7 +17,7 @@ public class BoardGame {
     @Id
     private String id;
 
-    @Field(name = "Name")
+    @Field(name = "name")
     private String name;
 
     @Field(name = "description")
@@ -55,4 +55,7 @@ public class BoardGame {
 
     @Field(name = "reviews")
     private List<Review> reviews;
+
+    @Field(name = "averageplayingtime")
+    private double averagePlayingTime;
 }

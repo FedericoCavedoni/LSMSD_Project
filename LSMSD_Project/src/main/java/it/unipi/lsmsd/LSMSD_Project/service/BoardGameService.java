@@ -1,6 +1,7 @@
 package it.unipi.lsmsd.LSMSD_Project.service;
 
 import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameRepository;
+import it.unipi.lsmsd.LSMSD_Project.dto.BoardGameLimitedDTO;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGameNode;
 import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameNodeRepository;
@@ -99,10 +100,10 @@ public class BoardGameService {
         return boardGame;
     }
 
-    public List<BoardGame> getLimitedBoardGames(int limit) {
+    public List<BoardGameLimitedDTO> getLimitedBoardGames(int limit) {
         return boardGameRepository.findAll().stream()
                 .map(game -> {
-                    BoardGame limitedGame = new BoardGame();
+                    BoardGameLimitedDTO limitedGame = new BoardGameLimitedDTO();
                     limitedGame.setName(game.getName());
                     limitedGame.setCategory(game.getCategory());
                     limitedGame.setMinPlayers(game.getMinPlayers());
