@@ -1,8 +1,8 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
-import it.unipi.lsmsd.LSMSD_Project.dto.BoardGameLimitedDTO;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
+import it.unipi.lsmsd.LSMSD_Project.projections.BoardGameLimitedProjection;
 import it.unipi.lsmsd.LSMSD_Project.service.BoardGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -91,8 +91,8 @@ public class BoardGameController {
     }
 
     @GetMapping("/limited")
-    public ResponseEntity<List<BoardGameLimitedDTO>> getLimitedBoardGames(@RequestParam int limit) {
-        List<BoardGameLimitedDTO> boardGames = boardGameService.getLimitedBoardGames(limit);
+    public ResponseEntity<List<BoardGameLimitedProjection>> getLimitedBoardGames(@RequestParam int limit) {
+        List<BoardGameLimitedProjection> boardGames = boardGameService.getLimitedBoardGames(limit);
         return ResponseEntity.ok(boardGames);
     }
 
