@@ -3,6 +3,7 @@ package it.unipi.lsmsd.LSMSD_Project.controller;
 import it.unipi.lsmsd.LSMSD_Project.model.GameStatistic;
 import it.unipi.lsmsd.LSMSD_Project.model.Match;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
+import it.unipi.lsmsd.LSMSD_Project.model.UserGameStatistic;
 import it.unipi.lsmsd.LSMSD_Project.service.MatchService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +74,7 @@ public class MatchController {
         }
     }
 
-    @GetMapping("/statistics")
+    @GetMapping("/gameStatistics")
     public ResponseEntity<?> getGameStatistics(
             @RequestParam(required = false) Integer minMatches,
             @RequestParam(required = false) Integer limit,
@@ -83,6 +84,25 @@ public class MatchController {
         //if (true){
         if(currentUser != null && currentUser.isAdmin()) {
             List<GameStatistic> statistics = matchService.getGameStatistics(minMatches, limit, ascending);
+            if (!statistics.isEmpty()) {
+                return ResponseEntity.ok(statistics);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping("/userStatistics")
+    public ResponseEntity<?> getUserGameStatistics(
+            @RequestParam(required = false) Integer n,
+            @RequestParam(required = false) Boolean ascending,
+            HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if(true){
+        //if (currentUser != null && currentUser.isAdmin()) {
+            List<UserGameStatistic> statistics = matchService.getUserGameStatistics(n, ascending);
             if (!statistics.isEmpty()) {
                 return ResponseEntity.ok(statistics);
             } else {

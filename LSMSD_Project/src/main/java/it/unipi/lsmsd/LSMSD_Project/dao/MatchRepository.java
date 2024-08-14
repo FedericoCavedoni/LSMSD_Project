@@ -2,6 +2,7 @@ package it.unipi.lsmsd.LSMSD_Project.dao;
 
 import it.unipi.lsmsd.LSMSD_Project.model.GameStatistic;
 import it.unipi.lsmsd.LSMSD_Project.model.Match;
+import it.unipi.lsmsd.LSMSD_Project.model.UserGameStatistic;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -20,4 +21,14 @@ public interface MatchRepository extends MongoRepository<Match, String> {
             "{ $project: { _id: 0, game: '$_id', totalMatches: 1, totalWins: 1, avgDuration: 1, winRate: 1 } }"
     })
     List<GameStatistic> getGameStatistics(Integer minMatches, Integer limit, Integer sortOrder);
+
+
+    @Aggregation(pipeline = {
+            "{ $group: { _id: '$user', totalMatches: { $sum: 1 }, totalWins: { $sum: { $cond: ['$result', 1, 0] } }, mostPlayedGame: { $first: '$game' }, leastPlayedGame: { $last: '$game' } } }",
+            "{ $addFields: { winRate: { $multiply: [ { $divide: ['$totalWins', '$totalMatches'] }, 100 ] } } }",
+            "{ $sort: { totalMatches: ?1 } }",
+            "{ $limit: ?0 }",
+            "{ $project: { _id: 0, user: '$_id', totalMatches: 1, winRate: 1, mostPlayedGame: 1, leastPlayedGame: 1 } }"
+    })
+    List<UserGameStatistic> getUserGameStatistics(Integer limit, Integer sortOrder);
 }
