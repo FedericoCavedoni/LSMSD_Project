@@ -1,18 +1,16 @@
 package it.unipi.lsmsd.LSMSD_Project.service;
 
 import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameRepository;
-import it.unipi.lsmsd.LSMSD_Project.dto.BoardGameLimitedDTO;
+import it.unipi.lsmsd.LSMSD_Project.projections.BoardGameLimitedProjection;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGameNode;
 import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameNodeRepository;
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import it.unipi.lsmsd.LSMSD_Project.model.Review;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -100,20 +98,11 @@ public class BoardGameService {
         return boardGame;
     }
 
-    public List<BoardGameLimitedDTO> getLimitedBoardGames(int limit) {
-        return boardGameRepository.findAll().stream()
-                .map(game -> {
-                    BoardGameLimitedDTO limitedGame = new BoardGameLimitedDTO();
-                    limitedGame.setName(game.getName());
-                    limitedGame.setCategory(game.getCategory());
-                    limitedGame.setMinPlayers(game.getMinPlayers());
-                    limitedGame.setMaxPlayers(game.getMaxPlayers());
-                    limitedGame.setRating(game.getRating());
-                    limitedGame.setPlayingTime(game.getPlayingTime());
-                    return limitedGame;
-                })
+    public List<BoardGameLimitedProjection> getLimitedBoardGames(int limit) {
+        return boardGameRepository.findLimitedBoardGames().stream()
                 .limit(limit)
                 .collect(Collectors.toList());
     }
+
 
 }
