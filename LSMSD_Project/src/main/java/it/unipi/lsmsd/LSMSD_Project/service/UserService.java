@@ -5,6 +5,8 @@ import it.unipi.lsmsd.LSMSD_Project.dao.UserNodeRepository;
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.model.UserNode;
+import it.unipi.lsmsd.LSMSD_Project.projections.UserProfileProjection;
+import it.unipi.lsmsd.LSMSD_Project.projections.UserUsernameProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -48,8 +50,8 @@ public class UserService {
     }
 
 
-    public List<User> getAllUsers(int n) {
-        return userRepository.findAll(PageRequest.of(0, n)).getContent();
+    public List<UserUsernameProjection> getAllUsernames(int n) {
+        return userRepository.findAllUsernames(PageRequest.of(0, n));
     }
 
     public User getUserByUsername(String username) {
@@ -60,16 +62,8 @@ public class UserService {
         return userNodeRepository.findUserRelationships(username, relation, num);
     }
 
-    public User getUserProfile(String username) {
-        User user = userRepository.findByUsername(username);
-        if (user != null) {
-            User limitedUser = new User();
-            limitedUser.setUsername(user.getUsername());
-            limitedUser.setLibrary(user.getLibrary());
-            return limitedUser;
-        } else {
-            return null;
-        }
+    public UserProfileProjection getUserProfile(String username) {
+        return userRepository.findUserProfileByUsername(username);
     }
 
     @Transactional

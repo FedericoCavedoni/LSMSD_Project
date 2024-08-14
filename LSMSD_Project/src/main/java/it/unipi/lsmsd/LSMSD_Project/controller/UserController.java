@@ -1,6 +1,8 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
 import it.unipi.lsmsd.LSMSD_Project.model.User;
+import it.unipi.lsmsd.LSMSD_Project.projections.UserProfileProjection;
+import it.unipi.lsmsd.LSMSD_Project.projections.UserUsernameProjection;
 import it.unipi.lsmsd.LSMSD_Project.service.UserService;
 import it.unipi.lsmsd.LSMSD_Project.utils.UserAlreadyExistsException;
 import it.unipi.lsmsd.LSMSD_Project.utils.InvalidCredentialsException;
@@ -72,8 +74,8 @@ public class UserController {
 
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<User>> getAllUsers(@RequestParam int n) {
-        List<User> users = userService.getAllUsers(n);
+    public ResponseEntity<List<UserUsernameProjection>> getAllUsers(@RequestParam int n) {
+        List<UserUsernameProjection> users = userService.getAllUsernames(n);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
@@ -142,16 +144,16 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<?> getUserProfile(@RequestParam String username,HttpSession session) {
+    public ResponseEntity<?> getUserProfile(@RequestParam String username, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser != null) {
-            User user = userService.getUserProfile(username);
+            UserProfileProjection user = userService.getUserProfile(username);
             if (user != null) {
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
             }
-        }else{
+        } else {
             return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
         }
     }
