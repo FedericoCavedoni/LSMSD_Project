@@ -78,7 +78,6 @@ public class MatchController {
             @RequestParam(required = false) Boolean ascending,
             HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
-        //if (true){
         if(currentUser != null && currentUser.isAdmin()) {
             List<GameStatistic> statistics = matchService.getGameStatistics(minMatches, limit, ascending);
             if (!statistics.isEmpty()) {
@@ -97,7 +96,6 @@ public class MatchController {
             @RequestParam(required = false) Boolean ascending,
             HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
-        //if(true){
         if (currentUser != null && currentUser.isAdmin()) {
             List<UserGameStatistic> statistics = matchService.getUserGameStatistics(n, ascending);
             if (!statistics.isEmpty()) {
@@ -116,8 +114,7 @@ public class MatchController {
             @RequestParam(required = false) Integer minMatches,
             HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
-        if(true){
-        //if (currentUser != null && currentUser.isAdmin()) {
+        if (currentUser != null && currentUser.isAdmin()) {
             List<TopPlayerStatistic> statistics = matchService.getTopPlayersForEachGame(limit, minMatches);
             if (!statistics.isEmpty()) {
                 return ResponseEntity.ok(statistics);
