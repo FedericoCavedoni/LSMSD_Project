@@ -96,5 +96,12 @@ public class BoardGameController {
         return ResponseEntity.ok(boardGames);
     }
 
+    @GetMapping("/filterByRating")
+    public ResponseEntity<List<BoardGameLimitedProjection>> getBoardGamesByRating(@RequestParam float rating) {
+        List<BoardGameLimitedProjection> boardGames = boardGameService.getBoardGamesByRating(rating);
+        return ResponseEntity.ok(boardGames);
+    }
+
+
 
 }

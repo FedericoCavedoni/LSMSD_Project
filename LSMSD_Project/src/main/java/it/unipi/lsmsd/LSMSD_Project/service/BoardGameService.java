@@ -104,5 +104,9 @@ public class BoardGameService {
                 .collect(Collectors.toList());
     }
 
+    public List<BoardGameLimitedProjection> getBoardGamesByRating(float rating) {
+        return boardGameRepository.findBoardGamesWithRatingGreaterThanEqual(rating);
+    }
+
 
 }
