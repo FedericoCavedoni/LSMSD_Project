@@ -1,10 +1,7 @@
 package it.unipi.lsmsd.LSMSD_Project.service;
 
 import it.unipi.lsmsd.LSMSD_Project.dao.MatchRepository;
-import it.unipi.lsmsd.LSMSD_Project.model.GameStatistic;
-import it.unipi.lsmsd.LSMSD_Project.model.Match;
-import it.unipi.lsmsd.LSMSD_Project.model.TopPlayerStatistic;
-import it.unipi.lsmsd.LSMSD_Project.model.UserGameStatistic;
+import it.unipi.lsmsd.LSMSD_Project.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,4 +45,12 @@ public class MatchService {
 
         return matchRepository.getTopPlayersForEachGame(maxLimit, matchLimit);
     }
+
+    public List<TopAvgPlayersStatistic> getUsersWithHighestAvgNumGiocatori(Integer limit, Integer minMatches) {
+        int maxLimit = (limit != null) ? limit : Integer.MAX_VALUE;
+        int matchLimit = (minMatches != null) ?  minMatches: 0;
+
+        return matchRepository.findUsersWithHighestAvgNumGiocatori(maxLimit, matchLimit);
+    }
+
 }

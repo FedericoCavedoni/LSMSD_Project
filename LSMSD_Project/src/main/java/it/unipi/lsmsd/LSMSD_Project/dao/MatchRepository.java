@@ -1,9 +1,6 @@
 package it.unipi.lsmsd.LSMSD_Project.dao;
 
-import it.unipi.lsmsd.LSMSD_Project.model.GameStatistic;
-import it.unipi.lsmsd.LSMSD_Project.model.Match;
-import it.unipi.lsmsd.LSMSD_Project.model.TopPlayerStatistic;
-import it.unipi.lsmsd.LSMSD_Project.model.UserGameStatistic;
+import it.unipi.lsmsd.LSMSD_Project.model.*;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -44,4 +41,17 @@ public interface MatchRepository extends MongoRepository<Match, String> {
             "{ $limit: ?0 }"
     })
     List<TopPlayerStatistic> getTopPlayersForEachGame(Integer limit, Integer minMatches);
+
+
+    @Aggregation(pipeline = {
+            "{ $group: { _id: '$user', totalMatches: { $sum: 1 }, totalWins: { $sum: { $cond: ['$result', 1, 0] } }, avgNumGiocatori: { $avg: '$numgiocatori' } } }",
+            "{ $addFields: { winRate: { $multiply: [ { $divide: ['$totalWins', '$totalMatches'] }, 100 ] }, weightedWinRate: { $multiply: [{ $divide: ['$totalWins', '$totalMatches'] }, '$avgNumGiocatori'] } } }",
+            "{ $match: { $expr: { $gte: [ '$totalMatches', ?1 ] } } }",
+            "{ $sort: { avgNumGiocatori: -1 } }",
+            "{ $project: { _id: 0, user: '$_id', avgNumGiocatori: 1, winRate: 1, weightedWinRate: 1, totalMatches: 1 } }",
+            "{ $limit: ?0 }"
+    })
+    List<TopAvgPlayersStatistic> findUsersWithHighestAvgNumGiocatori(Integer limit, Integer minMatches);
+
+
 }

@@ -125,4 +125,26 @@ public class MatchController {
             return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @GetMapping("/topAvgPlayers")
+    public ResponseEntity<?> findUsersWithHighestAvgNumGiocatori(
+            @RequestParam(required = false) Integer n,
+            @RequestParam(required = false) Integer m,
+            HttpSession session) {
+
+        User currentUser = (User) session.getAttribute("user");
+
+        if(true){
+        //if (currentUser != null && currentUser.isAdmin()) {
+            List<TopAvgPlayersStatistic> result = matchService.getUsersWithHighestAvgNumGiocatori(n, m);
+            if (!result.isEmpty()) {
+                return ResponseEntity.ok(result);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }else{
+            return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 }
