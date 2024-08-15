@@ -104,5 +104,19 @@ public class BoardGameService {
                 .collect(Collectors.toList());
     }
 
+    public List<BoardGameLimitedProjection> getBoardGamesByRating(float rating) {
+        return boardGameRepository.findBoardGamesWithRatingGreaterThanEqual(rating);
+    }
+
+    public List<BoardGameLimitedProjection> getBoardGamesByCategories(List<String> categories) {
+        return boardGameRepository.findBoardGamesByCategories(categories);
+    }
+
+    public List<BoardGameLimitedProjection> getBoardGamesByMechanics(List<String> mechanics) {
+        return boardGameRepository.findBoardGamesByMechanics(mechanics);
+    }
+
+
+
 
 }
