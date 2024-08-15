@@ -134,8 +134,8 @@ public class MatchController {
 
         User currentUser = (User) session.getAttribute("user");
 
-        if(true){
-        //if (currentUser != null && currentUser.isAdmin()) {
+        //if(true){
+        if (currentUser != null && currentUser.isAdmin()) {
             List<TopAvgPlayersStatistic> result = matchService.getUsersWithHighestAvgNumGiocatori(n, m);
             if (!result.isEmpty()) {
                 return ResponseEntity.ok(result);
