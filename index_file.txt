@@ -1,0 +1,34 @@
+Query molto utilizzate:
+
+.Controllo se esiste review di stesso utente
+
+indice: db.Review.createIndex({ username: 1, game: 1 })
+
+query senza indice: db.Review.find({
+  username: "Torsten",
+  game: "Pandemic"
+})
+
+
+query con indice: db.Review.find({
+  username: "Torsten",
+  game: "Pandemic"
+})
+.hint({ username: 1, game: 1 }).explain("executionStats")
+
+
+.Controllare che un gioco sia nella libreria di un utente 
+
+indice: db.User.createIndex({ username: 1, library: 1 })
+
+query senza indice: db.User.find({
+  username: "torguem",
+  library: { $in: ["Caylus"] }
+}).explain("executionStats")
+
+query con indice: db.User.find({
+  username: "torguem",
+  library: { $in: ["Caylus"] }
+}).hint({ username: 1, library: 1 }).explain("executionStats")
+
+
