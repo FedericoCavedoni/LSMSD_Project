@@ -32,3 +32,19 @@ query con indice: db.User.find({
 }).hint({ username: 1, library: 1 }).explain("executionStats")
 
 
+.Mostrare il rating di un gioco
+
+indice: db.BoardGames.createIndex({ name: 1 })
+
+query senza indice: db.BoardGames.find(
+  { name: "Pandemic" },
+  { _id: 0, name: 1, rating: 1 }
+).explain("executionStats")
+
+
+query con indice: db.BoardGames.find(
+  { name: "Pandemic" },
+  { _id: 0, name: 1, rating: 1 }
+).hint({ name: 1 }).explain("executionStats")
+
+
