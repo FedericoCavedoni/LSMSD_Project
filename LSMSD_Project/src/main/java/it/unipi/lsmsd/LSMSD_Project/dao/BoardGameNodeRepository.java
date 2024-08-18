@@ -10,7 +10,7 @@ import org.springframework.data.neo4j.repository.query.Query;
 import java.util.List;
 import java.util.Map;
 
-public interface BoardGameNodeRepository extends Neo4jRepository<BoardGameNode, String> {
+public interface BoardGameNodeRepository extends Neo4jRepository<BoardGameNode,Long> {
     BoardGame findByName(String name);
 
     @Query("MATCH (b:BoardGame {name: $name}) DETACH DELETE b")

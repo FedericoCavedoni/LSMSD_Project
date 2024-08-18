@@ -3,6 +3,9 @@ package it.unipi.lsmsd.LSMSD_Project.controller;
 import it.unipi.lsmsd.LSMSD_Project.model.FollowedUser;
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
+import it.unipi.lsmsd.LSMSD_Project.model.UserNode;
+import it.unipi.lsmsd.LSMSD_Project.model.BoardGameNode;
+import it.unipi.lsmsd.LSMSD_Project.model.UserSimilarity;
 import it.unipi.lsmsd.LSMSD_Project.service.RelationshipService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +23,9 @@ public class RelationshipController {
     @Autowired
     private RelationshipService relationshipService;
 
-    @GetMapping("/user")
-    public ResponseEntity<List<Relation>> getUserRelationships(@RequestParam String username, @RequestParam(required = false) String relation, @RequestParam int n) {
-        List<Relation> relationships = relationshipService.getUserRelationships(username, relation, n);
-        return ResponseEntity.ok(relationships);
-    }
-
-    @GetMapping("/boardgame")
-    public ResponseEntity<List<Relation>> getBoardGameRelationships(@RequestParam String name, @RequestParam(required = false) String relation, @RequestParam int n) {
-        List<Relation> relationships = relationshipService.getBoardGameRelationships(name, relation, n);
-        return ResponseEntity.ok(relationships);
-    }
 
     @PostMapping("/addFollow")
-    public ResponseEntity<?> followUser(@RequestParam String followee,HttpSession session) {
+    public ResponseEntity<?> followUser(@RequestParam String followee, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
@@ -49,13 +41,13 @@ public class RelationshipController {
     }
 
     @PostMapping("/addLike")
-    public ResponseEntity<?> likeBoardGame(@RequestParam String boardGameName,HttpSession session) {
+    public ResponseEntity<?> likeBoardGame(@RequestParam Long boardGameId, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
         }
         try {
-            relationshipService.likeBoardGame(currentUser.getUsername(), boardGameName);
+            relationshipService.likeBoardGame(currentUser.getUsername(), boardGameId);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (ResponseStatusException e) {
             throw e;
@@ -64,70 +56,164 @@ public class RelationshipController {
         }
     }
 
-    @GetMapping("/find")
-    public ResponseEntity<Relation> findRelationship(
-            @RequestParam String firstNode,
-            @RequestParam String relationType,
-            @RequestParam String secondNode) {
 
-        Relation relation = relationshipService.findRelationship(firstNode, relationType, secondNode);
-        if (relation != null) {
-            return ResponseEntity.ok(relation);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteRelationship(
+    @DeleteMapping("/deletefollow")
+    public ResponseEntity<?> deleteFollowRelationship(
             @RequestParam(required = false) String firstNode,
-            @RequestParam String relationType,
-            @RequestParam String secondNode) {
+            @RequestParam String secondNode,
+            HttpSession session) {
+
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (firstNode == null) {
+            firstNode = currentUser.getUsername();
+        } else {
+            if (!currentUser.isAdmin()) {
+                return new ResponseEntity<>("User not authorized", HttpStatus.UNAUTHORIZED);
+            }
+        }
 
         try {
-            relationshipService.deleteRelationship(firstNode, relationType, secondNode);
+            relationshipService.deleteFollowRelationship(firstNode, secondNode);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @DeleteMapping("/deletelike")
+    public ResponseEntity<?> deleteLikedRelationship(
+            @RequestParam(required = false) String firstNode,
+            @RequestParam Long gameId,
+            HttpSession session) {
+
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (firstNode == null) {
+            firstNode = currentUser.getUsername();
+        } else {
+            if (!currentUser.isAdmin()) {
+                return new ResponseEntity<>("User not authorized", HttpStatus.UNAUTHORIZED);
+            }
+        }
+
+        try {
+            relationshipService.deleteLikedRelationship(firstNode, gameId);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @GetMapping("/followedAndLikedGames")
-    public ResponseEntity<List<FollowedUser>> getFollowedUsersAndLikedGames(@RequestParam String username, @RequestParam int n) {
+
+    // utenti seguiti da un utente
+    @GetMapping("/followed")
+    public ResponseEntity<?> getFollowed(@RequestParam(required = false) String username, @RequestParam int n, HttpSession session) {
+        // Stampa i parametri ricevuti
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+        if (username == null) {
+            username = currentUser.getUsername();
+        }
         try {
-            List<FollowedUser> followedUsers = relationshipService.getFollowedUsersAndLikedGames(username, n);
+            List<UserNode> followedUsers = relationshipService.getFollowed(username, n);
             return new ResponseEntity<>(followedUsers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    //utenti che seguono un utente
+    @GetMapping("/followers")
+    public ResponseEntity<?> getFollowers(@RequestParam(required = false) String username, @RequestParam int n, HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+        if (username == null) {
+            username = currentUser.getUsername();
+        }
+
+        try {
+            List<UserNode> followers = relationshipService.getFollowers(username, n);
+            return new ResponseEntity<>(followers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/followed")
-    public ResponseEntity<List<FollowedUser>> getFollowed(@RequestParam String username, @RequestParam int n) {
+    @GetMapping("/likedGames")
+    public ResponseEntity<?> getLikedBoardGames(
+            @RequestParam(required = false) String username,
+            @RequestParam int n,
+            HttpSession session) {
+
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+        if (username == null) {
+            username = currentUser.getUsername();
+        }
+
         try {
-            List<FollowedUser> followedUsers = relationshipService.getFollowed(username, n);
-            return new ResponseEntity<>(followedUsers, HttpStatus.OK);
+            List<BoardGameNode> likedBoardGames = relationshipService.getLikedBoardGames(username, n);
+            return new ResponseEntity<>(likedBoardGames, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @GetMapping("/topFollowedUsers")
-    public ResponseEntity<List<String>> getTopFollowedUsers(@RequestParam String username, @RequestParam int n) {
+    public ResponseEntity<?> getTopFollowedUsers(@RequestParam int n, HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
         try {
-            List<String> followedUsers = relationshipService.getTopFollowedUsers(username, n);
+            List<UserNode> followedUsers = relationshipService.getTopFollowedUsers(currentUser.getUsername(), n);
             return new ResponseEntity<>(followedUsers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/topBoardGames")
-    public ResponseEntity<List<String>> getTopBoardGames(@RequestParam String username, @RequestParam int n) {
+    public ResponseEntity<?> getTopBoardGames(
+            @RequestParam int n,
+            HttpSession session) {
+
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
         try {
-            List<String> boardGames = relationshipService.getTopBoardGamesForUser(username, n);
+            List<BoardGameNode> boardGames = relationshipService.getTopBoardGamesForUser(currentUser.getUsername(), n);
             return new ResponseEntity<>(boardGames, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/userMostSimilar")
+    public ResponseEntity<?> userMostSimilar(@RequestParam int n, HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            List<UserSimilarity> similarUsers = relationshipService.getUserMostSimilar(currentUser.getUsername(), n);
+            return new ResponseEntity<>(similarUsers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

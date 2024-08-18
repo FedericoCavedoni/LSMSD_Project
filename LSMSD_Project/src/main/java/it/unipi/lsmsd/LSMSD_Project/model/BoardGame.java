@@ -15,7 +15,7 @@ import java.util.List;
 @Document(collection = "BoardGames")
 public class BoardGame {
     @Id
-    private String id;
+    private long id;
 
     @Field(name = "name")
     private String name;

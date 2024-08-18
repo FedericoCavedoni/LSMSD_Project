@@ -10,12 +10,12 @@ import org.springframework.data.neo4j.core.schema.Node;
 @Getter
 public class BoardGameNode {
     @Id
-    private String id;
+    private long id;  // Cambiato da String a Integer
     private String name;
 
     public BoardGameNode() {}
 
-    public BoardGameNode(String id, String name) {
+    public BoardGameNode(long id, String name) {
         this.id = id;
         this.name = name;
     }
