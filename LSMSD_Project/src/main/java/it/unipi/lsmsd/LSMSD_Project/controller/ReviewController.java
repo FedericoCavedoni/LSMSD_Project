@@ -50,7 +50,7 @@ public class ReviewController {
         if (deleted) {
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Recensione non trovata");
         }
     }
 
