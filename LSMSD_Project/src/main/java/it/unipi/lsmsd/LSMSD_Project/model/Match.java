@@ -14,7 +14,9 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Match {
 
     @Id
-    private String id;
+    private String mongoid;
+    @Field(name = "id")
+    private long gameId;
 
     @Field(name = "user")
     private String user;
