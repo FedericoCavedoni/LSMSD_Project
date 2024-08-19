@@ -50,7 +50,7 @@ public class BoardGameService {
             BoardGame savedBoardGame = boardGameRepository.save(existingBoardGame);
 
             BoardGameNode boardGameNode = new BoardGameNode();
-            boardGameNode.setId(savedBoardGame.getId());
+            boardGameNode.setGameId(savedBoardGame.getGameId());
             boardGameNode.setName(savedBoardGame.getName());
             boardGameNodeRepository.save(boardGameNode);
 
@@ -64,7 +64,7 @@ public class BoardGameService {
         if (existingBoardGame == null) {
             BoardGame savedBoardGame = boardGameRepository.save(boardGame);
 
-            BoardGameNode boardGameNode = new BoardGameNode(savedBoardGame.getId(), savedBoardGame.getName());
+            BoardGameNode boardGameNode = new BoardGameNode(savedBoardGame.getGameId(), savedBoardGame.getName());
             boardGameNodeRepository.save(boardGameNode);
 
             return savedBoardGame;
