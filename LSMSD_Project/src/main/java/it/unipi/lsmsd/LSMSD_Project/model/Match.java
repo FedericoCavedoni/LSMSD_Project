@@ -15,7 +15,7 @@ public class Match {
 
     @Id
     private String mongoid;
-    @Field(name = "id")
+    @Field(name = "gameId")
     private long gameId;
 
     @Field(name = "user")
