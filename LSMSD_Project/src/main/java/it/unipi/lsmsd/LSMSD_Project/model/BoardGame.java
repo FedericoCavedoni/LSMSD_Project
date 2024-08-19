@@ -15,7 +15,10 @@ import java.util.List;
 @Document(collection = "BoardGames")
 public class BoardGame {
     @Id
-    private long id;
+    private String mongoId;  // Questo è il campo che rappresenta l'_id generato automaticamente da MongoDB
+
+    @Field(name = "id")
+    private long id;  // Questo è il tuo campo personalizzato che desideri mantenere
 
     @Field(name = "name")
     private String name;
@@ -29,7 +32,7 @@ public class BoardGame {
     @Field(name = "rating")
     private float rating;
 
-    @Field(name = "Year")
+    @Field(name = "year")
     private int year;
 
     @Field(name = "minplayers")
