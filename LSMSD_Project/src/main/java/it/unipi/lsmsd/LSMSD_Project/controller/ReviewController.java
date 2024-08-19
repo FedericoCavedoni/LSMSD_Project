@@ -26,7 +26,7 @@ public class ReviewController {
             if (newReview != null) {
                 return ResponseEntity.ok(newReview);
             } else {
-                return ResponseEntity.status(409).body(null);
+                return ResponseEntity.status(409).body("Hai già inserito una review per questo gioco");
             }
         }else {
             return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
