@@ -31,13 +31,12 @@ public class BoardGameController {
     }
 
     @GetMapping("/getBoardGameByName")
-    public ResponseEntity<BoardGameNameProjection> getBoardGameNameByName(@RequestParam String name) {
-        BoardGameNameProjection boardGame = boardGameService.findBoardGameNameByName(name);
-        if (boardGame != null) {
-            return ResponseEntity.ok(boardGame);
-        } else {
+    public ResponseEntity<List<BoardGame>> getBoardGameByName(@RequestParam String name) {
+        List<BoardGame> boardGames = boardGameService.getBoardGameByName(name);
+        if (boardGames.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(boardGames);
     }
 
     @PutMapping("/updateBoardGame")
