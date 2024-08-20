@@ -5,6 +5,7 @@ import it.unipi.lsmsd.LSMSD_Project.dao.UserNodeRepository;
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.model.UserNode;
+import it.unipi.lsmsd.LSMSD_Project.projections.UserOnlyUsernameProjection;
 import it.unipi.lsmsd.LSMSD_Project.projections.UserProfileProjection;
 import it.unipi.lsmsd.LSMSD_Project.projections.UserUsernameProjection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,10 @@ public class UserService {
 
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public UserOnlyUsernameProjection getOnlyUsernameByUsername(String username) {
+        return userRepository.findOnlyUsernameByUsername(username);
     }
 
     public List<Relation> getUserRelationships(String username, String relation, int num) {

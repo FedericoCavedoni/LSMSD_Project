@@ -3,6 +3,7 @@ package it.unipi.lsmsd.LSMSD_Project.controller;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.projections.BoardGameLimitedProjection;
+import it.unipi.lsmsd.LSMSD_Project.projections.BoardGameNameProjection;
 import it.unipi.lsmsd.LSMSD_Project.service.BoardGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,8 @@ public class BoardGameController {
     }
 
     @GetMapping("/getBoardGameByName")
-    public ResponseEntity<BoardGame> getBoardGameByName(@RequestParam String name) {
-        BoardGame boardGame = boardGameService.findBoardGameByName(name);
+    public ResponseEntity<BoardGameNameProjection> getBoardGameNameByName(@RequestParam String name) {
+        BoardGameNameProjection boardGame = boardGameService.findBoardGameNameByName(name);
         if (boardGame != null) {
             return ResponseEntity.ok(boardGame);
         } else {

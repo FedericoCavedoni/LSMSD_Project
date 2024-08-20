@@ -7,6 +7,7 @@ import it.unipi.lsmsd.LSMSD_Project.model.BoardGameNode;
 import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameNodeRepository;
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import it.unipi.lsmsd.LSMSD_Project.model.Review;
+import it.unipi.lsmsd.LSMSD_Project.projections.BoardGameNameProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,10 @@ public class BoardGameService {
         return boardGameRepository.findAll();
     }
 
-    public BoardGame findBoardGameByName(String name) {
-        return boardGameRepository.findByName(name);
+
+
+    public BoardGameNameProjection findBoardGameNameByName(String name) {
+        return boardGameRepository.findBoardGameNameByName(name);
     }
 
     public BoardGame updateBoardGame(String name, BoardGame updatedBoardGame) {

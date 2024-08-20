@@ -1,6 +1,7 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
 import it.unipi.lsmsd.LSMSD_Project.model.User;
+import it.unipi.lsmsd.LSMSD_Project.projections.UserOnlyUsernameProjection;
 import it.unipi.lsmsd.LSMSD_Project.projections.UserProfileProjection;
 import it.unipi.lsmsd.LSMSD_Project.projections.UserUsernameProjection;
 import it.unipi.lsmsd.LSMSD_Project.service.UserService;
@@ -79,15 +80,18 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/getByUsername")
-    public ResponseEntity<User> getUserByUsername(@RequestParam String username) {
-        User user = userService.getUserByUsername(username);
+
+    @GetMapping("/getOnlyUsername")
+    public ResponseEntity<UserOnlyUsernameProjection> getOnlyUsername(@RequestParam String username) {
+        UserOnlyUsernameProjection user = userService.getOnlyUsernameByUsername(username);
         if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            return ResponseEntity.ok(user);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
+
+
     @GetMapping("/current")
     public ResponseEntity<?> getCurrentUser(HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
