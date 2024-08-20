@@ -123,8 +123,7 @@ public class BoardGameController {
     @PutMapping("/updateRatings")
     public ResponseEntity<?> updateAllRatings(HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
-        if(true){
-            //if (currentUser != null && currentUser.isAdmin()) {
+            if (currentUser != null && currentUser.isAdmin()) {
             reviewService.updateAllBoardGameRatings();
             return ResponseEntity.ok("Ratings aggiornati con successo");
         } else {
@@ -135,8 +134,7 @@ public class BoardGameController {
     @PutMapping("/updateAllReviews")
     public ResponseEntity<?> updateAllReviews(HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
-        if(true){
-            //if (currentUser != null && currentUser.isAdmin()) {
+            if (currentUser != null && currentUser.isAdmin()) {
             reviewService.updateAllBoardGameReviews();
             return ResponseEntity.ok("Recensioni aggiornate con successo per tutti i giochi");
         } else {
