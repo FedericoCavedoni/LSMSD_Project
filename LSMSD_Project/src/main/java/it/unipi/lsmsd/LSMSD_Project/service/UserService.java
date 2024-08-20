@@ -55,6 +55,10 @@ public class UserService {
         return userRepository.findAllUsernames(PageRequest.of(0, n));
     }
 
+    public List<UserUsernameProjection> findUsernamesByPartialName(String partialName) {
+        return userRepository.findUsernamesContainingIgnoreCase(partialName);
+    }
+
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
