@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface ReviewRepository extends MongoRepository<Review, String> {
-    List<Review> findByGame(String game);
+    List<Review> findByGame(Long gameId);
     List<Review> findByUsername(String username);
-    List<Review> findByUsernameAndGame(String username, String game);
+    List<Review> findByUsernameAndGame(String username, Long gameId);
 }

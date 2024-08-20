@@ -28,9 +28,9 @@ public class ReviewService {
 
     public Review addReview(Review review) {
         String username = review.getUsername();
-        String game = review.getGame();
+        Long gameId = review.getGameId();
 
-        List<Review> reviews = reviewRepository.findByUsernameAndGame(username, game);
+        List<Review> reviews = reviewRepository.findByUsernameAndGame(username, gameId);
 
         if(!reviews.isEmpty()){
             return null;
@@ -39,8 +39,8 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-    public boolean deleteReview(String username, String game) {
-        List<Review> reviews = reviewRepository.findByUsernameAndGame(username, game);
+    public boolean deleteReview(String username, Long gameId) {
+        List<Review> reviews = reviewRepository.findByUsernameAndGame(username, gameId);
         if (!reviews.isEmpty()) {
             reviewRepository.deleteAll(reviews);
             return true;
@@ -52,34 +52,33 @@ public class ReviewService {
         return reviewRepository.findByUsername(username);
     }
 
-    public List<Review> getReviewsByGame(String game) {
-        return reviewRepository.findByGame(game);
+    public List<Review> getReviewsByGameId(Long gameId) {
+        return reviewRepository.findByGame(gameId);
     }
 
-    public double getAverageRatingByGame(String game) {
-        List<Review> reviews = reviewRepository.findByGame(game);
+    public double getAverageRatingByGameId(Long gameId) {
+        List<Review> reviews = reviewRepository.findByGame(gameId);
         return reviews.stream().mapToDouble(Review::getRating).average().orElse(0.0);
     }
 
-    public List<Review> findReviewByUserAndGame(String username, String game) {
-        return reviewRepository.findByUsernameAndGame(username, game);
+    public List<Review> findReviewByUserAndGameId(String username, Long gameId) {
+        return reviewRepository.findByUsernameAndGame(username, gameId);
     }
 
-    public List<Review> getRecentReviews(String game, int limit) {
+    public List<Review> getRecentReviews(Long gameId, int limit) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("game").is(game));
+        query.addCriteria(Criteria.where("gameId").is(gameId));
         query.with(Sort.by(Sort.Direction.DESC, "date"));
         query.limit(limit);
 
         return mongoTemplate.find(query, Review.class);
     }
 
-    public List<Review> getFilteredReviews(String game, Integer minRating, Integer maxRating, Integer limit) {
+    public List<Review> getFilteredReviews(Long gameId, Integer minRating, Integer maxRating, Integer limit) {
         Query query = new Query();
 
-        if (StringUtils.hasText(game)) {
-            query.addCriteria(Criteria.where("game").is(game));
-        }
+        query.addCriteria(Criteria.where("gameId").is(gameId));
+
 
         if (minRating != null && maxRating != null) {
             query.addCriteria(Criteria.where("rating").gte(minRating).lte(maxRating));
@@ -98,10 +97,10 @@ public class ReviewService {
         return mongoTemplate.find(query, Review.class);
     }
 
-    public List<Review> getTopNReviews(String game, int n) {
+    public List<Review> getTopNReviews(Long gameId, int n) {
         Query query = new Query();
 
-        query.addCriteria(Criteria.where("game").is(game));
+        query.addCriteria(Criteria.where("gameId").is(gameId));
 
         query.with(Sort.by(Sort.Direction.DESC, "rating"));
 
@@ -110,10 +109,10 @@ public class ReviewService {
         return mongoTemplate.find(query, Review.class);
     }
 
-    public List<Review> getLowestNReviews(String game, int n) {
+    public List<Review> getLowestNReviews(Long gameId, int n) {
         Query query = new Query();
 
-        query.addCriteria(Criteria.where("game").is(game));
+        query.addCriteria(Criteria.where("gameId").is(gameId));
 
         query.with(Sort.by(Sort.Direction.ASC, "rating"));
 
@@ -126,7 +125,7 @@ public class ReviewService {
         List<BoardGame> boardGames = boardGameRepository.findAll();
 
         for (BoardGame game : boardGames) {
-            float averageRating = (float) getAverageRatingByGame(game.getName());
+            float averageRating = (float) getAverageRatingByGameId(game.getGameId());
             game.setRating(averageRating);
             boardGameRepository.save(game);
         }
@@ -136,7 +135,7 @@ public class ReviewService {
         List<BoardGame> boardGames = boardGameRepository.findAll();
 
         for (BoardGame game : boardGames) {
-            List<Review> latestReviews = getRecentReviews(game.getName(), 5);
+            List<Review> latestReviews = getRecentReviews(game.getGameId(), 5);
             game.setReviews(latestReviews);
             boardGameRepository.save(game);
         }
