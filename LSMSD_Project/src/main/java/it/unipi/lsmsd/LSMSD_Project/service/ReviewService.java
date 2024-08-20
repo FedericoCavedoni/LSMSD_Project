@@ -1,6 +1,8 @@
 package it.unipi.lsmsd.LSMSD_Project.service;
 
+import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameRepository;
 import it.unipi.lsmsd.LSMSD_Project.dao.ReviewRepository;
+import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
 import it.unipi.lsmsd.LSMSD_Project.model.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -20,6 +22,9 @@ public class ReviewService {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
+    @Autowired
+    private BoardGameRepository boardGameRepository;
 
     public Review addReview(Review review) {
         String username = review.getUsername();
@@ -115,5 +120,25 @@ public class ReviewService {
         query.limit(n);
 
         return mongoTemplate.find(query, Review.class);
+    }
+
+    public void updateAllBoardGameRatings() {
+        List<BoardGame> boardGames = boardGameRepository.findAll();
+
+        for (BoardGame game : boardGames) {
+            float averageRating = (float) getAverageRatingByGame(game.getName());
+            game.setRating(averageRating);
+            boardGameRepository.save(game);
+        }
+    }
+
+    public void updateAllBoardGameReviews() {
+        List<BoardGame> boardGames = boardGameRepository.findAll();
+
+        for (BoardGame game : boardGames) {
+            List<Review> latestReviews = getRecentReviews(game.getName(), 5);
+            game.setReviews(latestReviews);
+            boardGameRepository.save(game);
+        }
     }
 }
