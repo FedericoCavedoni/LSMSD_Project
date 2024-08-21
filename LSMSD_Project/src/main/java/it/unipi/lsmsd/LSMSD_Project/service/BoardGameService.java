@@ -29,8 +29,13 @@ public class BoardGameService {
 
 
 
-    public BoardGameNameProjection findBoardGameNameByName(String name) {
-        return boardGameRepository.findBoardGameNameByName(name);
+    public List<BoardGame> getBoardGameByName(String name) {
+        BoardGame exactMatch = boardGameRepository.findByName(name);
+        if (exactMatch != null) {
+            return List.of(exactMatch);
+        } else {
+            return boardGameRepository.findByNameContainingIgnoreCase(name);
+        }
     }
 
     public BoardGame updateBoardGame(String name, BoardGame updatedBoardGame) {

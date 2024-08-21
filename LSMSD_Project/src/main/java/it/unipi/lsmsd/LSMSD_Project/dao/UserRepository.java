@@ -22,4 +22,7 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     @Query(value = "{ 'username' : ?0 }", fields = "{ 'username' : 1 }")
     UserOnlyUsernameProjection findOnlyUsernameByUsername(String username);
+
+    @Query(value = "{ 'username': { $regex: ?0, $options: 'i' } }", fields = "{ 'username' : 1 }")
+    List<UserUsernameProjection> findUsernamesContainingIgnoreCase(String partialName);
 }

@@ -75,8 +75,13 @@ public class UserController {
 
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<UserUsernameProjection>> getAllUsers(@RequestParam int n) {
-        List<UserUsernameProjection> users = userService.getAllUsernames(n);
+    public ResponseEntity<List<UserUsernameProjection>> getAllUsers(@RequestParam(required = false) String name, @RequestParam int n) {
+        List<UserUsernameProjection> users;
+        if (name != null && !name.isEmpty()) {
+            users = userService.findUsernamesByPartialName(name);
+        } else {
+            users = userService.getAllUsernames(n);
+        }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 

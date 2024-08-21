@@ -31,13 +31,12 @@ public class BoardGameController {
     }
 
     @GetMapping("/getBoardGameByName")
-    public ResponseEntity<BoardGameNameProjection> getBoardGameNameByName(@RequestParam String name) {
-        BoardGameNameProjection boardGame = boardGameService.findBoardGameNameByName(name);
-        if (boardGame != null) {
-            return ResponseEntity.ok(boardGame);
-        } else {
+    public ResponseEntity<List<BoardGame>> getBoardGameByName(@RequestParam String name) {
+        List<BoardGame> boardGames = boardGameService.getBoardGameByName(name);
+        if (boardGames.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(boardGames);
     }
 
     @PutMapping("/updateBoardGame")
@@ -123,8 +122,7 @@ public class BoardGameController {
     @PutMapping("/updateRatings")
     public ResponseEntity<?> updateAllRatings(HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
-        if(true){
-            //if (currentUser != null && currentUser.isAdmin()) {
+            if (currentUser != null && currentUser.isAdmin()) {
             reviewService.updateAllBoardGameRatings();
             return ResponseEntity.ok("Ratings aggiornati con successo");
         } else {
@@ -135,8 +133,7 @@ public class BoardGameController {
     @PutMapping("/updateAllReviews")
     public ResponseEntity<?> updateAllReviews(HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
-        if(true){
-            //if (currentUser != null && currentUser.isAdmin()) {
+            if (currentUser != null && currentUser.isAdmin()) {
             reviewService.updateAllBoardGameReviews();
             return ResponseEntity.ok("Recensioni aggiornate con successo per tutti i giochi");
         } else {

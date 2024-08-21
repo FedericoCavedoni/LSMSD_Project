@@ -28,6 +28,9 @@ public interface BoardGameRepository extends MongoRepository<BoardGame, String> 
     @Query(value = "{ 'name' : ?0 }", fields = "{ 'name' : 1 }")
     BoardGameNameProjection findBoardGameNameByName(String name);
 
+    @Query(value = "{ 'name': { $regex: ?0, $options: 'i' } }")
+    List<BoardGame> findByNameContainingIgnoreCase(String partialName);
+
 
 }
 

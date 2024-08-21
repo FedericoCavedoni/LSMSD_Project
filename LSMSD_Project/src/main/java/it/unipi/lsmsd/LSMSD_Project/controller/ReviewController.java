@@ -34,7 +34,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteReview(@RequestParam(required = false) String username, @RequestParam String game, HttpSession session) {
+    public ResponseEntity<?> deleteReview(@RequestParam(required = false) String username, @RequestParam Long gameId, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
@@ -46,7 +46,7 @@ public class ReviewController {
                 return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
             }
         }
-        boolean deleted = reviewService.deleteReview(username, game);
+        boolean deleted = reviewService.deleteReview(username, gameId);
         if (deleted) {
             return ResponseEntity.ok().build();
         } else {
@@ -75,8 +75,8 @@ public class ReviewController {
     }
 
     @GetMapping("/getByGame")
-    public ResponseEntity<List<Review>> getReviewsByGame(@RequestParam String game) {
-        List<Review> reviews = reviewService.getReviewsByGame(game);
+    public ResponseEntity<List<Review>> getReviewsByGame(@RequestParam Long gameId) {
+        List<Review> reviews = reviewService.getReviewsByGameId(gameId);
         if (reviews.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -84,14 +84,14 @@ public class ReviewController {
     }
 
     @GetMapping("/averageRating")
-    public ResponseEntity<?> getAverageRatingByGame(@RequestParam String game) {
-        double averageRating = reviewService.getAverageRatingByGame(game);
+    public ResponseEntity<?> getAverageRatingByGame(@RequestParam Long gameId) {
+        double averageRating = reviewService.getAverageRatingByGameId(gameId);
         return ResponseEntity.ok(averageRating);
     }
 
     @GetMapping("/findReview")
-    public ResponseEntity<Review> getReviewByUserAndGame(@RequestParam String username, @RequestParam String game) {
-        List<Review> reviews = reviewService.findReviewByUserAndGame(username, game);
+    public ResponseEntity<Review> getReviewByUserAndGame(@RequestParam String username, @RequestParam Long gameId) {
+        List<Review> reviews = reviewService.findReviewByUserAndGameId(username, gameId);
 
         if (reviews.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -103,9 +103,9 @@ public class ReviewController {
     }
 
     @GetMapping("/recent")
-    public ResponseEntity<List<Review>> getRecentReviews(@RequestParam String game, int num) {
+    public ResponseEntity<List<Review>> getRecentReviews(@RequestParam Long gameId, int num) {
         try {
-            List<Review> recentReviews = reviewService.getRecentReviews(game, num);
+            List<Review> recentReviews = reviewService.getRecentReviews(gameId, num);
             return new ResponseEntity<>(recentReviews, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -114,12 +114,12 @@ public class ReviewController {
 
     @GetMapping("/filtered")
     public ResponseEntity<List<Review>> getFilteredReviews(
-            @RequestParam(required = false) String game,
+            @RequestParam Long gameId,
             @RequestParam(required = false) Integer minRating,
             @RequestParam(required = false) Integer maxRating,
             @RequestParam(required = false) Integer limit) {
 
-        List<Review> reviews = reviewService.getFilteredReviews(game, minRating, maxRating, limit);
+        List<Review> reviews = reviewService.getFilteredReviews(gameId, minRating, maxRating, limit);
 
         if (reviews.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -129,16 +129,16 @@ public class ReviewController {
 
     @GetMapping("/top-or-lowest")
     public ResponseEntity<List<Review>> getTopOrLowestNReviews(
-            @RequestParam String game,
+            @RequestParam Long gameId,
             @RequestParam int n,
             @RequestParam(defaultValue = "true") boolean highest) {
 
         List<Review> reviews;
 
         if (highest) {
-            reviews = reviewService.getTopNReviews(game, n);
+            reviews = reviewService.getTopNReviews(gameId, n);
         } else {
-            reviews = reviewService.getLowestNReviews(game, n);
+            reviews = reviewService.getLowestNReviews(gameId, n);
         }
 
         if (reviews.isEmpty()) {
