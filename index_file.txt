@@ -1,50 +1,30 @@
-Query molto utilizzate:
-
+//PRIMA QUERY
 .Controllo se esiste review di stesso utente
 
 indice: db.Review.createIndex({ username: 1, game: 1 })
 
-query senza indice: db.Review.find({
-  username: "Torsten",
-  game: "Pandemic"
-})
+query senza indice: db.Review.find({username: "Torsten",game: "Pandemic"}).explain("executionStats")
+
+query con indice: db.Review.find({username: "Torsten",game: "Pandemic"}).hint({ username: 1, game: 1 }).explain("executionStats")
 
 
-query con indice: db.Review.find({
-  username: "Torsten",
-  game: "Pandemic"
-})
-.hint({ username: 1, game: 1 }).explain("executionStats")
-
-
+//SECONDA QUERY
 .Controllare che un gioco sia nella libreria di un utente 
 
 indice: db.User.createIndex({ username: 1, library: 1 })
 
-query senza indice: db.User.find({
-  username: "torguem",
-  library: { $in: ["Caylus"] }
-}).explain("executionStats")
+query senza indice: db.User.find({username: "torguem",library: { $in: ["Caylus"] }}).explain("executionStats")
 
-query con indice: db.User.find({
-  username: "torguem",
-  library: { $in: ["Caylus"] }
-}).hint({ username: 1, library: 1 }).explain("executionStats")
+query con indice: db.User.find({username: "torguem",library: { $in: ["Caylus"] }}).hint({ username: 1, library: 1 }).explain("executionStats")
 
 
-.Mostrare il rating di un gioco
+//TERZA QUERY
+.Cercare i match di un utente
 
-indice: db.BoardGames.createIndex({ name: 1 })
+indice: db.Match.createIndex({ user: 1 })
 
-query senza indice: db.BoardGames.find(
-  { name: "Pandemic" },
-  { _id: 0, name: 1, rating: 1 }
-).explain("executionStats")
+query senza indice: db.Match.find({ user: "liq3" }).explain("executionStats");
 
-
-query con indice: db.BoardGames.find(
-  { name: "Pandemic" },
-  { _id: 0, name: 1, rating: 1 }
-).hint({ name: 1 }).explain("executionStats")
+query con indice: db.Match.find({ user: "liq3" }).hint({ user: 1 }).explain("executionStats");
 
 
