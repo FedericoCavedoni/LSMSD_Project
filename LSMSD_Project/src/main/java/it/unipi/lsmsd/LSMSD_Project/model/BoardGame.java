@@ -15,10 +15,10 @@ import java.util.List;
 @Document(collection = "BoardGames")
 public class BoardGame {
     @Id
-    private String mongoId;  // Questo è il campo che rappresenta l'_id generato automaticamente da MongoDB
+    private String mongoId;
 
     @Field(name = "id")
-    private long gameId;  // Questo è il tuo campo personalizzato che desideri mantenere
+    private long gameId;
 
     @Field(name = "name")
     private String name;

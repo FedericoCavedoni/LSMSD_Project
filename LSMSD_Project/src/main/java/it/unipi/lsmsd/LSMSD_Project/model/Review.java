@@ -13,10 +13,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "Review")
 public class Review {
     @Id
-    private String mongoId;  // Questo è il campo che rappresenta l'_id generato automaticamente da MongoDB
+    private String mongoId;
 
     @Field(name = "id")
-    private long gameId;  // Questo è il tuo campo personalizzato che desideri mantenere
+    private long gameId;
 
     @Field(name = "username")
     private String username;
