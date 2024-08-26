@@ -28,3 +28,10 @@ query senza indice: db.Match.find({ user: "liq3" }).explain("executionStats");
 query con indice: db.Match.find({ user: "liq3" }).hint({ user: 1 }).explain("executionStats");
 
 
+//QUARTO INDICE 
+.Query di aggiornamento rating e reviews collection boardgame
+
+indice: db.Review.createIndex({id: 1})
+
+
+
