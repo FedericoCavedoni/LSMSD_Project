@@ -20,7 +20,8 @@ public class MongoConfig {
     @Bean
     public MongoClient mongoClient() {
         MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(new com.mongodb.ConnectionString("mongodb://localhost:27018/Progetto"))
+                //.applyConnectionString(new com.mongodb.ConnectionString("mongodb://localhost:27018/Progetto"))
+                .applyConnectionString(new com.mongodb.ConnectionString("mongodb://localhost:27017/Progetto"))
                 .writeConcern(WriteConcern.W1)
                 .readPreference(ReadPreference.nearest())
                 .build();
@@ -30,7 +31,12 @@ public class MongoConfig {
 
     @Bean
     public MongoTemplate mongoTemplate() {
-        return new MongoTemplate(new SimpleMongoClientDatabaseFactory(mongoClient(), "Progetto"));
+        return new MongoTemplate(new SimpleMongoClientDatabaseFactory(mongoClient(), "Progetto"), mappingMongoConverter(mongoMappingContext()));
+    }
+
+    @Bean
+    public MongoMappingContext mongoMappingContext() {
+        return new MongoMappingContext();
     }
 
     @Bean

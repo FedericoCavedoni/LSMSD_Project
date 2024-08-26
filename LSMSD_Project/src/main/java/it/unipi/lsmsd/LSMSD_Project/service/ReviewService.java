@@ -52,12 +52,12 @@ public class ReviewService {
         return reviewRepository.findByUsername(username);
     }
 
-    public List<Review> getReviewsByGameId(Long gameId) {
-        return reviewRepository.findByGame(gameId);
+    public List<Review> getReviewsByGameId(String gameId) {
+        return reviewRepository.findByGameId(gameId);
     }
 
-    public double getAverageRatingByGameId(Long gameId) {
-        List<Review> reviews = reviewRepository.findByGame(gameId);
+    public double getAverageRatingByGameId(String gameId) {
+        List<Review> reviews = reviewRepository.findByGameId(gameId);
         return reviews.stream().mapToDouble(Review::getRating).average().orElse(0.0);
     }
 
@@ -123,9 +123,10 @@ public class ReviewService {
 
     public void updateAllBoardGameRatings() {
         List<BoardGame> boardGames = boardGameRepository.findAll();
+        System.out.println(boardGames.size());
 
         for (BoardGame game : boardGames) {
-            float averageRating = (float) getAverageRatingByGameId(game.getGameId());
+            float averageRating = (float) getAverageRatingByGameId(String.valueOf(game.getGameId()));
             game.setRating(averageRating);
             boardGameRepository.save(game);
         }

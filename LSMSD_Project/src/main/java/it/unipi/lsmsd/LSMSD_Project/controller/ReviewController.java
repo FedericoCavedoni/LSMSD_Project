@@ -75,7 +75,7 @@ public class ReviewController {
     }
 
     @GetMapping("/getByGame")
-    public ResponseEntity<List<Review>> getReviewsByGame(@RequestParam Long gameId) {
+    public ResponseEntity<List<Review>> getReviewsByGame(@RequestParam String gameId) {
         List<Review> reviews = reviewService.getReviewsByGameId(gameId);
         if (reviews.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -84,7 +84,7 @@ public class ReviewController {
     }
 
     @GetMapping("/averageRating")
-    public ResponseEntity<?> getAverageRatingByGame(@RequestParam Long gameId) {
+    public ResponseEntity<?> getAverageRatingByGame(@RequestParam String gameId) {
         double averageRating = reviewService.getAverageRatingByGameId(gameId);
         return ResponseEntity.ok(averageRating);
     }
