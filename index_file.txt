@@ -34,4 +34,10 @@ query con indice: db.Match.find({ user: "liq3" }).hint({ user: 1 }).explain("exe
 indice: db.Review.createIndex({id: 1})
 
 
+//QUINTO INDICE
+.aggiornamento di playingTime dei boardgame
+
+indice: db.Match.createIndex({gameId:1})
+
+
 

@@ -54,4 +54,5 @@ public interface MatchRepository extends MongoRepository<Match, String> {
     List<TopAvgPlayersStatistic> findUsersWithHighestAvgNumGiocatori(Integer limit, Integer minMatches);
 
 
+    List<Match> findByGameId(Long gameId);
 }

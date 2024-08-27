@@ -17,7 +17,7 @@ public class BoardGame {
     @Id
     private String mongoId;
 
-    @Field(name = "id")
+    @Field(name = "gameId")
     private long gameId;
 
     @Field(name = "name")
