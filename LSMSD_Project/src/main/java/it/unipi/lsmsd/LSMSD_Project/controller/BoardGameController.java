@@ -5,6 +5,7 @@ import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.projections.BoardGameLimitedProjection;
 import it.unipi.lsmsd.LSMSD_Project.projections.BoardGameNameProjection;
 import it.unipi.lsmsd.LSMSD_Project.service.BoardGameService;
+import it.unipi.lsmsd.LSMSD_Project.service.MatchService;
 import it.unipi.lsmsd.LSMSD_Project.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,9 @@ public class BoardGameController {
 
     @Autowired
     private ReviewService reviewService;
+
+    @Autowired
+    private MatchService matchService;
 
 
     @GetMapping("/getBoardGames")
@@ -136,6 +140,17 @@ public class BoardGameController {
             if (currentUser != null && currentUser.isAdmin()) {
             reviewService.updateAllBoardGameReviews();
             return ResponseEntity.ok("Recensioni aggiornate con successo per tutti i giochi");
+        } else {
+            return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PutMapping("/updateAllAveragePlayingTime")
+    public ResponseEntity<?> updateAllAveragePlayingTime(HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser != null && currentUser.isAdmin()) {
+            matchService.updateAllAveragePlayingTime();
+            return ResponseEntity.ok("AveragePlayingTime aggiornato con successo per tutti i giochi");
         } else {
             return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
         }

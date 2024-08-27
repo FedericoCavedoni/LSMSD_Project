@@ -60,5 +60,5 @@ public class BoardGame {
     private List<Review> reviews;
 
     @Field(name = "averageplayingtime")
-    private double averagePlayingTime;
+    private float averagePlayingTime;
 }

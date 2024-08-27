@@ -1,6 +1,8 @@
 package it.unipi.lsmsd.LSMSD_Project.service;
 
+import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameRepository;
 import it.unipi.lsmsd.LSMSD_Project.dao.MatchRepository;
+import it.unipi.lsmsd.LSMSD_Project.dao.ReviewRepository;
 import it.unipi.lsmsd.LSMSD_Project.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,9 @@ public class MatchService {
 
     @Autowired
     private MatchRepository matchRepository;
+
+    @Autowired
+    private BoardGameRepository boardGameRepository;
 
     public Match addMatch(Match match) {
         return matchRepository.save(match);
@@ -51,6 +56,23 @@ public class MatchService {
         int matchLimit = (minMatches != null) ?  minMatches: 0;
 
         return matchRepository.findUsersWithHighestAvgNumGiocatori(maxLimit, matchLimit);
+    }
+
+    public float getAveragePlayingTimeByGameId(String gameId) {
+        List<Match> matches = matchRepository.findByGameId(gameId);
+
+        return (float) matches.stream().mapToDouble(Match::getDuration).average().orElse(0.0);
+    }
+
+
+    public void updateAllAveragePlayingTime() {
+        List<BoardGame> boardGames = boardGameRepository.findAll();
+
+        for (BoardGame game : boardGames) {
+            float averagePlayingTime = getAveragePlayingTimeByGameId(String.valueOf(game.getGameId()));
+            game.setAveragePlayingTime(averagePlayingTime);
+            boardGameRepository.save(game);
+        }
     }
 
 }
