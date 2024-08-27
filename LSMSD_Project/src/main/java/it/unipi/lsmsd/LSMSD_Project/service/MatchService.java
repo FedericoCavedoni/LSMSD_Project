@@ -58,9 +58,9 @@ public class MatchService {
         return matchRepository.findUsersWithHighestAvgNumGiocatori(maxLimit, matchLimit);
     }
 
-    public float getAveragePlayingTimeByGameId(Long gameId) {
+    public int getAveragePlayingTimeByGameId(Long gameId) {
         List<Match> matches = matchRepository.findByGameId(gameId);
-        return (float) matches.stream().mapToDouble(Match::getDuration).average().orElse(0.0);
+        return (int) matches.stream().mapToDouble(Match::getDuration).average().orElse(0.0);
     }
 
 
@@ -68,7 +68,7 @@ public class MatchService {
         List<BoardGame> boardGames = boardGameRepository.findAll();
 
         for (BoardGame game : boardGames) {
-            float averagePlayingTime = getAveragePlayingTimeByGameId(game.getGameId());
+            int averagePlayingTime = getAveragePlayingTimeByGameId(game.getGameId());
             game.setAveragePlayingTime(averagePlayingTime);
             boardGameRepository.save(game);
         }

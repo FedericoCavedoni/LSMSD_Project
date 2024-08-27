@@ -1,40 +1,30 @@
-//PRIMA QUERY
-.Controllo se esiste review di stesso utente
-
-indice: db.Review.createIndex({ username: 1, game: 1 })
-
-query senza indice: db.Review.find({username: "Torsten",game: "Pandemic"}).explain("executionStats")
-
-query con indice: db.Review.find({username: "Torsten",game: "Pandemic"}).hint({ username: 1, game: 1 }).explain("executionStats")
-
-
-//SECONDA QUERY
+//QUERY
 .Controllare che un gioco sia nella libreria di un utente 
 
-indice: db.User.createIndex({ username: 1, library: 1 })
+indice: db.User.createIndex({ username: 1})
 
-query senza indice: db.User.find({username: "torguem",library: { $in: ["Caylus"] }}).explain("executionStats")
-
-query con indice: db.User.find({username: "torguem",library: { $in: ["Caylus"] }}).hint({ username: 1, library: 1 }).explain("executionStats")
+query: db.User.find({username: "torguem",library: { $in: ["Caylus"] }}).explain("executionStats")
 
 
-//TERZA QUERY
+//QUERY
 .Cercare i match di un utente
 
 indice: db.Match.createIndex({ user: 1 })
 
 query senza indice: db.Match.find({ user: "liq3" }).explain("executionStats");
 
-query con indice: db.Match.find({ user: "liq3" }).hint({ user: 1 }).explain("executionStats");
 
 
-//QUARTO INDICE 
+//QUERY
 .Query di aggiornamento rating e reviews collection boardgame
+.Controllo se esiste review di stesso utente
 
-indice: db.Review.createIndex({id: 1})
+indice: db.Review.createIndex({gameId: 1})
+
+query: db.Review.find({username: "Torsten",gameId: 30549}).explain("executionStats")
 
 
-//QUINTO INDICE
+//QUERY
 .aggiornamento di playingTime dei boardgame
 
 indice: db.Match.createIndex({gameId:1})

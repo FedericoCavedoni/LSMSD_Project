@@ -1,10 +1,4 @@
-1. Creare cartelle 
-
-mkdir  c:\MongoDB\data\r1  
-mkdir  c:\MongoDB\data\r2  
-mkdir  c:\MongoDB\data\r3  
-
-2. Far partire repliche 
+1. Far partire repliche 
 
 #FIRST MEMBER (PRIMARY)
 mongod --replSet rs0 --port 27018 --bind_ip localhost --dbpath c:\MongoDB\data\r1  --oplogSize 200		
@@ -15,17 +9,16 @@ mongod --replSet rs0 --port 27019 --bind_ip localhost --dbpath c:\MongoDB\data\r
 #THIRD MEMBER (SECONDARY)
 mongod --replSet rs0 --port 27020 --bind_ip localhost --dbpath c:\MongoDB\data\r3  --oplogSize 200
 
-3. Fare dump sulle repliche 
+2. Collegarsi alla prima replica
 
-mongodump --host localhost --port 27017 --out C:\MongoDB\backup
+mongosh --port 27018
 
-mongorestore --host localhost --port 27018 --db Progetto C:\MongoDB\backup\Progetto #SCEGLIERE LA PORTA DELLA REPLICA PRIMARIA
+rs.conf()
 
-4. Collegarsi alla prima replica
+rs.status()
 
-mongosh --port 27017 #SCEGLIERE LA PORTA DELLA REPLICA PRIMARIA
 
-5. Cambiare stato delle repliche e controllare stato
+//CONFIG
 
 rsconf = {
     _id: "rs0",
@@ -47,16 +40,14 @@ rsconf = {
       }
     ]
   }
-  
-
 
 rs.initiate(rsconf)
 
 rs.reconfig(rsconf)
 
-rs.conf()
 
+//PER FARE DUMP 
 
-7. Controllare stato
+mongodump --host localhost --port 27017 --out C:\MongoDB\backup
 
-rs.status()
+mongorestore --host localhost --port 27018 --db Progetto C:\MongoDB\backup\Progetto #SCEGLIERE LA PORTA DELLA REPLICA PRIMARIA
