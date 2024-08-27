@@ -79,4 +79,12 @@ public class MatchService {
         return matchRepository.findTopPlayerByGameId(gameId);
     }
 
+    public TopGameStatistic getMostPlayedGameByMatches() {
+        return matchRepository.findMostPlayedGameByMatches();
+    }
+
+    public TopGameStatistic getMostPlayedGameByTime() {
+        return matchRepository.findMostPlayedGameByTime();
+    }
+
 }

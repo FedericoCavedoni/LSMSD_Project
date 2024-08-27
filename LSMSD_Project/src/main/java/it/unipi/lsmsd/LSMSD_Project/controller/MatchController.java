@@ -157,4 +157,24 @@ public class MatchController {
         }
     }
 
+    @GetMapping("/mostPlayedGameByMatches")
+    public ResponseEntity<TopGameStatistic> getMostPlayedGameByMatches() {
+        TopGameStatistic topGame = matchService.getMostPlayedGameByMatches();
+        if (topGame != null) {
+            return ResponseEntity.ok(topGame);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/mostPlayedGameByTime")
+    public ResponseEntity<TopGameStatistic> getMostPlayedGameByTime() {
+        TopGameStatistic topGame = matchService.getMostPlayedGameByTime();
+        if (topGame != null) {
+            return ResponseEntity.ok(topGame);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

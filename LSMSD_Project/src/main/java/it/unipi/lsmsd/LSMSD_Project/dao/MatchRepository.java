@@ -63,5 +63,23 @@ public interface MatchRepository extends MongoRepository<Match, String> {
     })
     TopPlayerStatistic findTopPlayerByGameId(long gameId);
 
+    // Metodo per trovare il gioco con il maggior numero di partite giocate
+    @Aggregation(pipeline = {
+            "{ $group: { _id: '$game', totalMatches: { $sum: 1 } } }",
+            "{ $sort: { totalMatches: -1 } }",  // Ordina per numero di partite giocate in modo decrescente
+            "{ $limit: 1 }",  // Limita il risultato al top game
+            "{ $project: { _id: 0, game: '$_id', totalMatches: 1 } }"
+    })
+    TopGameStatistic findMostPlayedGameByMatches();
+
+    // Metodo per trovare il gioco con il maggior tempo totale giocato
+    @Aggregation(pipeline = {
+            "{ $group: { _id: '$game', totalTimePlayed: { $sum: '$duration' } } }",
+            "{ $sort: { totalTimePlayed: -1 } }",  // Ordina per tempo totale giocato in modo decrescente
+            "{ $limit: 1 }",  // Limita il risultato al top game
+            "{ $project: { _id: 0, game: '$_id', totalTimePlayed: 1 } }"
+    })
+    TopGameStatistic findMostPlayedGameByTime();
+
 
 }
