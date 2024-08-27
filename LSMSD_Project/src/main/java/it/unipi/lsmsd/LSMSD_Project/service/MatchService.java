@@ -75,4 +75,8 @@ public class MatchService {
         }
     }
 
+    public TopPlayerStatistic getTopPlayerByGameId(long gameId) {
+        return matchRepository.findTopPlayerByGameId(gameId);
+    }
+
 }

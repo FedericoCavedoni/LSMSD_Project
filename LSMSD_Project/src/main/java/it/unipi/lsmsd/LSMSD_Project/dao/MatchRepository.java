@@ -53,5 +53,15 @@ public interface MatchRepository extends MongoRepository<Match, String> {
     })
     List<TopAvgPlayersStatistic> findUsersWithHighestAvgNumGiocatori(Integer limit, Integer minMatches);
 
+    @Aggregation(pipeline = {
+            "{ $match: { 'gameId': ?0 } }",  // Filtra per gameId
+            "{ $group: { _id: '$user', totalMatches: { $sum: 1 }, totalWins: { $sum: { $cond: ['$result', 1, 0] } }, game: { $first: '$game' } } }",
+            "{ $addFields: { winRate: { $divide: ['$totalWins', '$totalMatches'] } } }",
+            "{ $sort: { winRate: -1 } }",  // Ordina per winrate decrescente
+            "{ $limit: 1 }",  // Limita il risultato al top player
+            "{ $project: { _id: 0, user: '$_id', game: 1, winRate: 1, totalMatches: 1 } }"
+    })
+    TopPlayerStatistic findTopPlayerByGameId(long gameId);
+
 
 }

@@ -147,4 +147,14 @@ public class MatchController {
         }
     }
 
+    @GetMapping("/topPlayerByGame")
+    public ResponseEntity<TopPlayerStatistic> getTopPlayerByGameId(@RequestParam long gameId) {
+        TopPlayerStatistic topPlayer = matchService.getTopPlayerByGameId(gameId);
+        if (topPlayer != null) {
+            return ResponseEntity.ok(topPlayer);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
