@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import java.util.List;
 
@@ -72,6 +74,8 @@ public class ReviewService {
         query.addCriteria(Criteria.where("gameId").is(gameId));
         query.with(Sort.by(Sort.Direction.DESC, "date"));
         query.limit(limit);
+        // Includi solo i campi desiderati
+        query.fields().include("username").include("rating").include("review text");
 
         return mongoTemplate.find(query, Review.class);
     }
@@ -138,7 +142,19 @@ public class ReviewService {
 
         for (BoardGame game : boardGames) {
             List<Review> latestReviews = getRecentReviews(game.getGameId(), 5);
-            game.setReviews(latestReviews);
+            List<Review> filteredReviews = latestReviews.stream()
+                    .map(review -> {
+                        Review filteredReview = new Review();
+                        filteredReview.setUsername(review.getUsername());
+                        filteredReview.setRating(review.getRating());
+                        filteredReview.setReviewText(review.getReviewText());
+                        return filteredReview;
+                    })
+                    .collect(Collectors.toList());
+
+            // Imposta le recensioni filtrate sul gioco da tavolo
+            game.setReviews(filteredReviews);
+
             boardGameRepository.save(game);
         }
     }

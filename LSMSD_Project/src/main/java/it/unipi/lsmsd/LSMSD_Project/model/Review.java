@@ -16,7 +16,7 @@ public class Review {
     private String mongoId;
 
     @Field(name = "gameId")
-    private long gameId;
+    private Long gameId;
 
     @Field(name = "username")
     private String username;
