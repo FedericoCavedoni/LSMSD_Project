@@ -13,8 +13,8 @@ import java.util.Map;
 public interface BoardGameNodeRepository extends Neo4jRepository<BoardGameNode,Long> {
     BoardGame findByName(String name);
 
-    @Query("MATCH (b:BoardGame {name: $name}) DETACH DELETE b")
-    void deleteByName(String name);
+    @Query("MATCH (b:BoardGame {id: $gameId}) DETACH DELETE b")
+    void deleteByGameId(Long gameId);
 
     @Query("MATCH (b:BoardGame {name: $name})-[r]-(n) " +
             "WHERE $relation IS NULL OR type(r) = $relation " +

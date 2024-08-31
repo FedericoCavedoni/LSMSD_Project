@@ -38,8 +38,8 @@ public class BoardGameService {
         }
     }
 
-    public BoardGame updateBoardGame(String name, BoardGame updatedBoardGame) {
-        BoardGame existingBoardGame = boardGameRepository.findByName(name);
+    public BoardGame updateBoardGame(long id, BoardGame updatedBoardGame) {
+        BoardGame existingBoardGame = boardGameRepository.findByGameId(id);
         if (existingBoardGame != null) {
             existingBoardGame.setName(updatedBoardGame.getName());
             existingBoardGame.setDescription(updatedBoardGame.getDescription());
@@ -68,7 +68,7 @@ public class BoardGameService {
     }
 
     public BoardGame addBoardGame(BoardGame boardGame) {
-        BoardGame existingBoardGame = boardGameRepository.findByName(boardGame.getName());
+        BoardGame existingBoardGame = boardGameRepository.findByGameId(boardGame.getGameId());
         if (existingBoardGame == null) {
             BoardGame savedBoardGame = boardGameRepository.save(boardGame);
 
@@ -80,11 +80,11 @@ public class BoardGameService {
         return null;
     }
 
-    public boolean deleteBoardGameByName(String name) {
-        BoardGame existingBoardGame = boardGameRepository.findByName(name);
+    public boolean deleteBoardGameByName(long gameId) {
+        BoardGame existingBoardGame = boardGameRepository.findByGameId(gameId);
         if (existingBoardGame != null) {
             boardGameRepository.delete(existingBoardGame);
-            boardGameNodeRepository.deleteByName(name);
+            boardGameNodeRepository.deleteByGameId(gameId);
 
             return true;
         }
@@ -95,15 +95,12 @@ public class BoardGameService {
         return boardGameNodeRepository.findBoardGameRelationships(boardGameName, relation, num);
     }
 
-    public BoardGame getBoardGameDetailsWithReviews(String name) {
-        BoardGame boardGame = boardGameRepository.findByName(name);
-        if (boardGame != null && boardGame.getReviews() != null) {
-            List<Review> limitedReviews = boardGame.getReviews().stream()
-                    .limit(10)
-                    .toList();
-            boardGame.setReviews(limitedReviews);
+    public BoardGame getBoardGameDetailsWithReviews(long gameId) {
+        BoardGame boardGame = boardGameRepository.findByGameId(gameId);
+        if (boardGame != null) {
+            return boardGame;
         }
-        return boardGame;
+        return null;
     }
 
     public List<BoardGameLimitedProjection> getLimitedBoardGames(int limit) {

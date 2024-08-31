@@ -12,6 +12,7 @@ import java.util.Map;
 
 public interface BoardGameRepository extends MongoRepository<BoardGame, String> {
     BoardGame findByName(String name);
+    BoardGame findByGameId(long gameId);
 
     @Query(value = "{}", fields = "{ 'name' : 1, 'category' : 1, 'minPlayers' : 1, 'maxPlayers' : 1, 'rating' : 1, 'playingTime' : 1, 'reviews.text' : 1 }")
     List<BoardGameLimitedProjection> findLimitedBoardGames();

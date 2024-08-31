@@ -47,7 +47,7 @@ public class BoardGameController {
     public ResponseEntity<?> updateBoardGame(@RequestBody BoardGame updatedBoardGame, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser != null && currentUser.isAdmin()) {
-        BoardGame boardGame = boardGameService.updateBoardGame(updatedBoardGame.getName(), updatedBoardGame);
+        BoardGame boardGame = boardGameService.updateBoardGame(updatedBoardGame.getGameId(), updatedBoardGame);
         if (boardGame != null) {
             return ResponseEntity.ok(boardGame);
         } else {
@@ -75,10 +75,10 @@ public class BoardGameController {
     }
 
     @DeleteMapping("/deleteBoardGame")
-    public ResponseEntity<?> deleteBoardGame(@RequestParam String name, HttpSession session) {
+    public ResponseEntity<?> deleteBoardGame(@RequestParam long gameId, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser != null && currentUser.isAdmin()) {
-        boolean deleted = boardGameService.deleteBoardGameByName(name);
+        boolean deleted = boardGameService.deleteBoardGameByName(gameId);
         if (deleted) {
             return ResponseEntity.ok().build();
         } else {
@@ -90,8 +90,8 @@ public class BoardGameController {
     }
 
     @GetMapping("/details")
-    public ResponseEntity<BoardGame> getBoardGameDetails(@RequestParam String name) {
-        BoardGame boardGame = boardGameService.getBoardGameDetailsWithReviews(name);
+    public ResponseEntity<BoardGame> getBoardGameDetails(@RequestParam long gameId) {
+        BoardGame boardGame = boardGameService.getBoardGameDetailsWithReviews(gameId);
         if (boardGame != null) {
             return ResponseEntity.ok(boardGame);
         } else {
