@@ -14,16 +14,16 @@ public interface BoardGameRepository extends MongoRepository<BoardGame, String> 
     BoardGame findByName(String name);
     BoardGame findByGameId(long gameId);
 
-    @Query(value = "{}", fields = "{ 'name' : 1, 'category' : 1, 'minPlayers' : 1, 'maxPlayers' : 1, 'rating' : 1, 'playingTime' : 1, 'reviews.text' : 1 }")
+    @Query(value = "{}", fields = "{ 'name' : 1, 'category' : 1, 'minPlayers' : 1, 'maxPlayers' : 1, 'rating' : 1, 'playingTime' : 1}")
     List<BoardGameLimitedProjection> findLimitedBoardGames();
 
-    @Query(value = "{ 'rating' : { $gte: ?0 } }", fields = "{ 'name' : 1, 'category' : 1, 'minPlayers' : 1, 'maxPlayers' : 1, 'rating' : 1, 'playingTime' : 1, 'reviews.text' : 1 }")
+    @Query(value = "{ 'rating' : { $gte: ?0 } }", fields = "{ 'name' : 1, 'category' : 1, 'minPlayers' : 1, 'maxPlayers' : 1, 'rating' : 1, 'playingTime' : 1}")
     List<BoardGameLimitedProjection> findBoardGamesWithRatingGreaterThanEqual(float rating);
 
-    @Query(value = "{ 'boardgamecategory' : { $in: ?0 } }", fields = "{ 'name' : 1, 'category' : 1, 'minPlayers' : 1, 'maxPlayers' : 1, 'rating' : 1, 'playingTime' : 1, 'reviews.text' : 1 }")
+    @Query(value = "{ 'boardgamecategory' : { $in: ?0 } }", fields = "{ 'name' : 1, 'category' : 1, 'minPlayers' : 1, 'maxPlayers' : 1, 'rating' : 1, 'playingTime' : 1}")
     List<BoardGameLimitedProjection> findBoardGamesByCategories(List<String> categories);
 
-    @Query(value = "{ 'boardgamemechanic' : { $in: ?0 } }", fields = "{ 'name' : 1, 'boardgamemechanic' : 1, 'category' :  1, 'minPlayers' : 1, 'maxPlayers' : 1, 'rating' : 1, 'playingTime' : 1, 'reviews.text' : 1 }")
+    @Query(value = "{ 'boardgamemechanic' : { $in: ?0 } }", fields = "{ 'name' : 1, 'boardgamemechanic' : 1, 'category' :  1, 'minPlayers' : 1, 'maxPlayers' : 1, 'rating' : 1, 'playingTime' : 1}")
     List<BoardGameLimitedProjection> findBoardGamesByMechanics(List<String> mechanics);
 
     @Query(value = "{ 'name' : ?0 }", fields = "{ 'name' : 1 }")
