@@ -39,7 +39,7 @@ public class User {
     private String dataNascita;
 
     @Field(name = "library")
-    private List<String> library;
+    private List<Game> library;
 
     @Field(name = "isAdmin")
     private boolean isAdmin;

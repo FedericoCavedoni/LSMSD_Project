@@ -1,5 +1,6 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
+import it.unipi.lsmsd.LSMSD_Project.model.Game;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.projections.UserOnlyUsernameProjection;
 import it.unipi.lsmsd.LSMSD_Project.projections.UserProfileProjection;
@@ -185,7 +186,7 @@ public class UserController {
 
     @GetMapping("/library")
     public ResponseEntity<?> getUserLibrary(@RequestParam String username) {
-        List<String> library = userService.getUserLibrary(username);
+        List<Game> library = userService.getUserLibrary(username);
         if (library != null) {
             return new ResponseEntity<>(library, HttpStatus.OK);
         } else {

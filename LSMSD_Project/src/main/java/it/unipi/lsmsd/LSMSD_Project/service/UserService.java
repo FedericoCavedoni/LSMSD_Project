@@ -2,6 +2,7 @@ package it.unipi.lsmsd.LSMSD_Project.service;
 
 import it.unipi.lsmsd.LSMSD_Project.dao.UserRepository;
 import it.unipi.lsmsd.LSMSD_Project.dao.UserNodeRepository;
+import it.unipi.lsmsd.LSMSD_Project.model.Game;
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.model.UserNode;
@@ -98,7 +99,7 @@ public class UserService {
         }
     }
 
-    public List<String> getUserLibrary(String username) {
+    public List<Game> getUserLibrary(String username) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             return user.getLibrary();
