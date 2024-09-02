@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface BoardGameRepository extends MongoRepository<BoardGame, String> {
     BoardGame findByName(String name);
@@ -31,6 +32,12 @@ public interface BoardGameRepository extends MongoRepository<BoardGame, String> 
 
     @Query(value = "{ 'name': { $regex: ?0, $options: 'i' } }")
     List<BoardGame> findByNameContainingIgnoreCase(String partialName);
+
+
+    @Query("{ 'gameId' : { $in: ?0 } }")
+    List<BoardGame> findByGameIdIn(Set<Long> gameIds);
+
+
 
 
 }

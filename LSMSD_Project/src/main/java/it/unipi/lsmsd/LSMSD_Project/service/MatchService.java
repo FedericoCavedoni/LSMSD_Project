@@ -7,8 +7,11 @@ import it.unipi.lsmsd.LSMSD_Project.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class MatchService {
@@ -64,15 +67,29 @@ public class MatchService {
     }
 
 
-    public void updateAllAveragePlayingTime() {
-        List<BoardGame> boardGames = boardGameRepository.findAll();
+    public void updateAllAveragePlayingTime(LocalDate date) {
+        List<Match> recentMatches;
+        if (date != null) {
+            recentMatches = matchRepository.findMatchesAfterDate(date);
+            System.out.println(recentMatches);
+        } else {
+            recentMatches = matchRepository.findAll();
+        }
+
+        Set<Long> gameIds = recentMatches.stream().map(Match::getGameId).collect(Collectors.toSet());
+
+        List<BoardGame> boardGames = boardGameRepository.findByGameIdIn(gameIds);
 
         for (BoardGame game : boardGames) {
             int averagePlayingTime = getAveragePlayingTimeByGameId(game.getGameId());
+            System.out.println(game.getName());
+            System.out.println(averagePlayingTime);
+
             game.setAveragePlayingTime(averagePlayingTime);
             boardGameRepository.save(game);
         }
     }
+
 
     public TopPlayerStatistic getTopPlayerByGameId(long gameId) {
         return matchRepository.findTopPlayerByGameId(gameId);

@@ -3,7 +3,9 @@ package it.unipi.lsmsd.LSMSD_Project.dao;
 import it.unipi.lsmsd.LSMSD_Project.model.*;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface MatchRepository extends MongoRepository<Match, String> {
@@ -83,4 +85,7 @@ public interface MatchRepository extends MongoRepository<Match, String> {
 
 
     List<Match> findByGameId(Long gameId);
+
+    @Query("{ 'date' : { $gte: ?0 } }")
+    List<Match> findMatchesAfterDate(LocalDate date);
 }

@@ -43,7 +43,7 @@ public class UserController {
             User registeredUser = userService.registerNewUser(user);
             return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
         } catch (UserAlreadyExistsException e) {
-            // Gestisci il caso in cui l'utente esista già
+            // Gestisci il caso in cui l'utente esista giàamongo
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }

@@ -10,11 +10,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import java.util.List;
-import java.util.stream.Collectors;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -127,18 +127,42 @@ public class ReviewService {
         return mongoTemplate.find(query, Review.class);
     }
 
-    public void updateAllBoardGameRatings() {
-        List<BoardGame> boardGames = boardGameRepository.findAll();
+    public void updateAllBoardGameRatings(LocalDate date) {
+        List<Review> recentReviews;
+        if (date != null) {
+            recentReviews = reviewRepository.findReviewsAfterDate(date);
+            System.out.println(recentReviews);
+        } else {
+            recentReviews = reviewRepository.findAll();
+        }
+
+        Set<Long> gameIds = recentReviews.stream().map(Review::getGameId).collect(Collectors.toSet());
+
+        List<BoardGame> boardGames = boardGameRepository.findByGameIdIn(gameIds);
 
         for (BoardGame game : boardGames) {
             float averageRating = (float) getAverageRatingByGameId(game.getGameId());
+            System.out.println(game.getName());
+            System.out.println(averageRating);
             game.setRating(averageRating);
             boardGameRepository.save(game);
         }
     }
 
-    public void updateAllBoardGameReviews() {
-        List<BoardGame> boardGames = boardGameRepository.findAll();
+
+
+    public void updateAllBoardGameReviews(LocalDate date) {
+        List<Review> recentReviews;
+        if (date != null) {
+            recentReviews = reviewRepository.findReviewsAfterDate(date);
+            System.out.println(recentReviews);
+        } else {
+            recentReviews = reviewRepository.findAll();
+        }
+
+        Set<Long> gameIds = recentReviews.stream().map(Review::getGameId).collect(Collectors.toSet());
+
+        List<BoardGame> boardGames = boardGameRepository.findByGameIdIn(gameIds);
 
         for (BoardGame game : boardGames) {
             List<Review> latestReviews = getRecentReviews(game.getGameId(), 5);
@@ -152,11 +176,11 @@ public class ReviewService {
                     })
                     .collect(Collectors.toList());
 
-            // Imposta le recensioni filtrate sul gioco da tavolo
-            game.setReviews(filteredReviews);
+            System.out.println(game.getName());
+            System.out.println(latestReviews);
 
+            game.setReviews(filteredReviews);
             boardGameRepository.save(game);
         }
     }
-
 }

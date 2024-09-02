@@ -3,13 +3,15 @@ package it.unipi.lsmsd.LSMSD_Project.controller;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.projections.BoardGameLimitedProjection;
-import it.unipi.lsmsd.LSMSD_Project.projections.BoardGameNameProjection;
 import it.unipi.lsmsd.LSMSD_Project.service.BoardGameService;
 import it.unipi.lsmsd.LSMSD_Project.service.MatchService;
 import it.unipi.lsmsd.LSMSD_Project.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import jakarta.servlet.http.HttpSession;
@@ -124,10 +126,10 @@ public class BoardGameController {
     }
 
     @PutMapping("/updateRatings")
-    public ResponseEntity<?> updateAllRatings(HttpSession session) {
+    public ResponseEntity<?> updateAllRatings(HttpSession session, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser != null && currentUser.isAdmin()) {
-            reviewService.updateAllBoardGameRatings();
+            reviewService.updateAllBoardGameRatings(date);
             return ResponseEntity.ok("Ratings aggiornati con successo");
         } else {
             return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
@@ -135,10 +137,10 @@ public class BoardGameController {
     }
 
     @PutMapping("/updateAllReviews")
-    public ResponseEntity<?> updateAllReviews(HttpSession session) {
+    public ResponseEntity<?> updateAllReviews(HttpSession session, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser != null && currentUser.isAdmin()) {
-            reviewService.updateAllBoardGameReviews();
+            reviewService.updateAllBoardGameReviews(date);
             return ResponseEntity.ok("Recensioni aggiornate con successo per tutti i giochi");
         } else {
             return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
@@ -146,14 +148,15 @@ public class BoardGameController {
     }
 
     @PutMapping("/updateAllAveragePlayingTime")
-    public ResponseEntity<?> updateAllAveragePlayingTime(HttpSession session) {
+    public ResponseEntity<?> updateAllAveragePlayingTime(HttpSession session, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser != null && currentUser.isAdmin()) {
-            matchService.updateAllAveragePlayingTime();
+            matchService.updateAllAveragePlayingTime(date);
             return ResponseEntity.ok("AveragePlayingTime aggiornato con successo per tutti i giochi");
         } else {
             return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
         }
     }
+
 
 }
