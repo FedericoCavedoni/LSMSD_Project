@@ -126,7 +126,7 @@ public class BoardGameController {
     }
 
     @PutMapping("/updateRatings")
-    public ResponseEntity<?> updateAllRatings(HttpSession session, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public ResponseEntity<?> updateAllRatings(HttpSession session, @RequestParam(required = false) String date) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser != null && currentUser.isAdmin()) {
             reviewService.updateAllBoardGameRatings(date);
@@ -137,7 +137,7 @@ public class BoardGameController {
     }
 
     @PutMapping("/updateAllReviews")
-    public ResponseEntity<?> updateAllReviews(HttpSession session, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public ResponseEntity<?> updateAllReviews(HttpSession session, @RequestParam(required = false) String date) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser != null && currentUser.isAdmin()) {
             reviewService.updateAllBoardGameReviews(date);
@@ -148,7 +148,7 @@ public class BoardGameController {
     }
 
     @PutMapping("/updateAllAveragePlayingTime")
-    public ResponseEntity<?> updateAllAveragePlayingTime(HttpSession session, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public ResponseEntity<?> updateAllAveragePlayingTime(HttpSession session, @RequestParam(required = false) String date) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser != null && currentUser.isAdmin()) {
             matchService.updateAllAveragePlayingTime(date);
@@ -157,6 +157,7 @@ public class BoardGameController {
             return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
         }
     }
+
 
 
 }

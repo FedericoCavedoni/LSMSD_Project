@@ -86,6 +86,6 @@ public interface MatchRepository extends MongoRepository<Match, String> {
 
     List<Match> findByGameId(Long gameId);
 
-    @Query("{ 'date' : { $gte: ?0 } }")
-    List<Match> findMatchesAfterDate(LocalDate date);
+    @Query("{ 'date': { $gte: ?0 } }")
+    List<Match> findMatchesAfterDate(String date);
 }

@@ -67,28 +67,25 @@ public class MatchService {
     }
 
 
-    public void updateAllAveragePlayingTime(LocalDate date) {
+    public void updateAllAveragePlayingTime(String date) {
         List<Match> recentMatches;
         if (date != null) {
             recentMatches = matchRepository.findMatchesAfterDate(date);
-            System.out.println(recentMatches);
         } else {
             recentMatches = matchRepository.findAll();
         }
 
         Set<Long> gameIds = recentMatches.stream().map(Match::getGameId).collect(Collectors.toSet());
-
         List<BoardGame> boardGames = boardGameRepository.findByGameIdIn(gameIds);
 
         for (BoardGame game : boardGames) {
             int averagePlayingTime = getAveragePlayingTimeByGameId(game.getGameId());
-            System.out.println(game.getName());
-            System.out.println(averagePlayingTime);
 
             game.setAveragePlayingTime(averagePlayingTime);
             boardGameRepository.save(game);
         }
     }
+
 
 
     public TopPlayerStatistic getTopPlayerByGameId(long gameId) {

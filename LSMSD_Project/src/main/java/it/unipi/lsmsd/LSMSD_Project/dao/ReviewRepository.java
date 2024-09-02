@@ -12,6 +12,6 @@ public interface ReviewRepository extends MongoRepository<Review, Long> {
     List<Review> findByUsernameAndGame(String username, Long gameId);
     List<Review> findByGameId(Long gameId);
 
-    @Query("{ 'date' : { $gte: ?0 } }")
-    List<Review> findReviewsAfterDate(LocalDate date);
+    @Query("{ 'date': { $gte: ?0 } }")
+    List<Review> findReviewsAfterDate(String date);
 }

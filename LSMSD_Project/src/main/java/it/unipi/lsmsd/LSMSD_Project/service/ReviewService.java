@@ -127,41 +127,34 @@ public class ReviewService {
         return mongoTemplate.find(query, Review.class);
     }
 
-    public void updateAllBoardGameRatings(LocalDate date) {
+    public void updateAllBoardGameRatings(String date) {
         List<Review> recentReviews;
         if (date != null) {
             recentReviews = reviewRepository.findReviewsAfterDate(date);
-            System.out.println(recentReviews);
         } else {
             recentReviews = reviewRepository.findAll();
         }
 
         Set<Long> gameIds = recentReviews.stream().map(Review::getGameId).collect(Collectors.toSet());
-
         List<BoardGame> boardGames = boardGameRepository.findByGameIdIn(gameIds);
 
         for (BoardGame game : boardGames) {
             float averageRating = (float) getAverageRatingByGameId(game.getGameId());
-            System.out.println(game.getName());
-            System.out.println(averageRating);
             game.setRating(averageRating);
             boardGameRepository.save(game);
         }
     }
 
 
-
-    public void updateAllBoardGameReviews(LocalDate date) {
+    public void updateAllBoardGameReviews(String date) {
         List<Review> recentReviews;
         if (date != null) {
             recentReviews = reviewRepository.findReviewsAfterDate(date);
-            System.out.println(recentReviews);
         } else {
             recentReviews = reviewRepository.findAll();
         }
 
         Set<Long> gameIds = recentReviews.stream().map(Review::getGameId).collect(Collectors.toSet());
-
         List<BoardGame> boardGames = boardGameRepository.findByGameIdIn(gameIds);
 
         for (BoardGame game : boardGames) {
@@ -176,11 +169,10 @@ public class ReviewService {
                     })
                     .collect(Collectors.toList());
 
-            System.out.println(game.getName());
-            System.out.println(latestReviews);
 
             game.setReviews(filteredReviews);
             boardGameRepository.save(game);
         }
     }
+
 }
