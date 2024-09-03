@@ -21,4 +21,23 @@ public interface BoardGameNodeRepository extends Neo4jRepository<BoardGameNode,L
             "RETURN b.name AS firstNode, type(r) AS relationType, n.username AS secondNode " +
             "LIMIT $limit")
     List<Relation> findBoardGameRelationships(String name, String relation, int limit);
+    @Query("MATCH (u:User {username: $username}), (b:BoardGame {id: $boardGameId}) " +
+            "MERGE (u)-[:LIKED]->(b)")
+    void likeBoardGame(String username, Long boardGameId);
+
+    @Query("MATCH (b:BoardGame {id: $id}) RETURN b")
+    Optional<BoardGameNode> findBoardGameById(Long id);
+    @Query("MATCH (a:User {username: $firstNode})-[r:LIKED]->(b:BoardGame {id: $gameId}) " +
+            "DELETE r")
+    void deleteLikedRelationship(String firstNode, Long gameId);
+    @Query("MATCH (u:User {username: $username})-[:FOLLOWS]->(followed:User)-[:LIKED]->(b:BoardGame) " +
+            "WHERE NOT (u)-[:LIKED]->(b) " +
+            "RETURN b.id AS id, b.name AS name, count(b) AS likeCount " +
+            "ORDER BY likeCount DESC " +
+            "LIMIT $n")
+    List<Map<String, Object>> findTopBoardGamesForUser(String username, int n);
+    @Query("MATCH (u:User {username: $username})-[:LIKED]->(b:BoardGame) " +
+            "RETURN b.id AS id, b.name AS name " +
+            "LIMIT $n")
+    List<Map<String, Object>> findLikedBoardGamesByUsername(String username, int n);
 }
