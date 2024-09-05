@@ -12,11 +12,9 @@ public class UserNode {
     @Id
     private String username;
 
-    // Costruttore che accetta un parametro
     public UserNode(String username) {
         this.username = username;
     }
 
-    // Costruttore di default
     public UserNode() {}
 }

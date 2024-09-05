@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface MatchRepository extends MongoRepository<Match, String> {

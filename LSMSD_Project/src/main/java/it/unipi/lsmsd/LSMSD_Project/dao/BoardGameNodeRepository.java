@@ -3,13 +3,11 @@ package it.unipi.lsmsd.LSMSD_Project.dao;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGameNode;
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import java.util.Optional;
 
 import java.util.List;
-import java.util.Map;
 
 public interface BoardGameNodeRepository extends Neo4jRepository<BoardGameNode,Long> {
     BoardGame findByName(String name);

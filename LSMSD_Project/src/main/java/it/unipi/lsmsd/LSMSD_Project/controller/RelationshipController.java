@@ -111,10 +111,8 @@ public class RelationshipController {
     }
 
 
-    // utenti seguiti da un utente
     @GetMapping("/followed")
     public ResponseEntity<?> getFollowed(@RequestParam(required = false) String username, @RequestParam int n, HttpSession session) {
-        // Stampa i parametri ricevuti
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
@@ -129,7 +127,7 @@ public class RelationshipController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    //utenti che seguono un utente
+
     @GetMapping("/followers")
     public ResponseEntity<?> getFollowers(@RequestParam(required = false) String username, @RequestParam int n, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");

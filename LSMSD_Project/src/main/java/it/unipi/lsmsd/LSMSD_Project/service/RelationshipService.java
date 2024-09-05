@@ -43,7 +43,7 @@ public class RelationshipService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
 
-        userNodeRepository.followUser(followerUsername, followeeUsername); // Use a custom query if needed
+        userNodeRepository.followUser(followerUsername, followeeUsername);
     }
 
     @Transactional
@@ -52,7 +52,7 @@ public class RelationshipService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User or BoardGame not found");
         }
 
-        boardGameNodeRepository.likeBoardGame(username, boardGameId); // Use a custom query if needed
+        boardGameNodeRepository.likeBoardGame(username, boardGameId);
     }
 
 
@@ -66,17 +66,16 @@ public class RelationshipService {
 
     @Transactional
     public void deleteFollowRelationship(String firstNode, String secondNode) {
-        userNodeRepository.deleteFollowRelationship(firstNode, secondNode); // Use a custom query if needed
+        userNodeRepository.deleteFollowRelationship(firstNode, secondNode);
     }
 
     public void deleteLikedRelationship(String firstNode, Long gameId) {
-        boardGameNodeRepository.deleteLikedRelationship(firstNode, gameId); // Use a custom query if needed
+        boardGameNodeRepository.deleteLikedRelationship(firstNode, gameId);
     }
 
 
     @Transactional
     public List<UserNode> getFollowed(String username, int n) {
-        // Il repository ora restituisce direttamente una lista di UserNode
         return userNodeRepository.findFollowedUsersByUsername(username, n);
     }
 
@@ -85,7 +84,6 @@ public class RelationshipService {
         return userNodeRepository.findFollowersByUsername(username, n);
     }
 
-    //Aiuta a identificare i giochi da tavolo più popolari tra gli utenti seguiti, facilitando il suggerimento di giochi simili.
     @Transactional
     public List<BoardGameNode> getTopBoardGamesForUser(String username, int n) {
         return boardGameNodeRepository.findTopBoardGamesForUser(username, n);
@@ -93,7 +91,6 @@ public class RelationshipService {
     }
 
 
-    //restituisce una lista di utenti che sono maggiormente seguiti dagli utenti che un determinato utente sta seguendo, ordinati per numero di follower decrescente.
     @Transactional
     public List<UserNode> getTopFollowedUsers(String username, int n) {
         return userNodeRepository.findTopFollowedUsers(username, n);
