@@ -5,8 +5,9 @@ import it.unipi.lsmsd.LSMSD_Project.model.UserNode;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.neo4j.repository.query.Query;
-
+import java.util.Optional;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface UserNodeRepository extends Neo4jRepository<UserNode, String> {

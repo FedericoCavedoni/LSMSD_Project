@@ -6,6 +6,7 @@ import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
+import java.util.Optional;
 
 import java.util.List;
 import java.util.Map;

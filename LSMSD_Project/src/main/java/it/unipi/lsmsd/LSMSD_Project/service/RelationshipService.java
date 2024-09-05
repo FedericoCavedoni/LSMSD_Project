@@ -1,6 +1,8 @@
 package it.unipi.lsmsd.LSMSD_Project.service;
 
 import it.unipi.lsmsd.LSMSD_Project.model.FollowedUser;
+import it.unipi.lsmsd.LSMSD_Project.dao.UserNodeRepository;
+import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameNodeRepository;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGameNode;
 import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import it.unipi.lsmsd.LSMSD_Project.model.UserNode;
