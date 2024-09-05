@@ -32,7 +32,7 @@ public class ReviewService {
         String username = review.getUsername();
         Long gameId = review.getGameId();
 
-        List<Review> reviews = reviewRepository.findByUsernameAndGame(username, gameId);
+        List<Review> reviews = reviewRepository.findByUsernameAndGameId(username, gameId);
 
         if(!reviews.isEmpty()){
             return null;
@@ -42,7 +42,10 @@ public class ReviewService {
     }
 
     public boolean deleteReview(String username, Long gameId) {
-        List<Review> reviews = reviewRepository.findByUsernameAndGame(username, gameId);
+        System.out.println(username);
+        System.out.println(gameId);
+        List<Review> reviews = reviewRepository.findByUsernameAndGameId(username, gameId);
+        System.out.println(reviews);
         if (!reviews.isEmpty()) {
             reviewRepository.deleteAll(reviews);
             return true;
@@ -66,7 +69,7 @@ public class ReviewService {
 
 
     public List<Review> findReviewByUserAndGameId(String username, Long gameId) {
-        return reviewRepository.findByUsernameAndGame(username, gameId);
+        return reviewRepository.findByUsernameAndGameId(username, gameId);
     }
 
     public List<Review> getRecentReviews(Long gameId, int limit) {
@@ -74,7 +77,6 @@ public class ReviewService {
         query.addCriteria(Criteria.where("gameId").is(gameId));
         query.with(Sort.by(Sort.Direction.DESC, "date"));
         query.limit(limit);
-        // Includi solo i campi desiderati
         query.fields().include("username").include("rating").include("review text");
 
         return mongoTemplate.find(query, Review.class);

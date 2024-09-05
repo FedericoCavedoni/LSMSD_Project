@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.Query;
 
 public interface ReviewRepository extends MongoRepository<Review, Long> {
     List<Review> findByUsername(String username);
-    List<Review> findByUsernameAndGame(String username, Long gameId);
+    List<Review> findByUsernameAndGameId(String username, Long gameId);
     List<Review> findByGameId(Long gameId);
 
     @Query("{ 'date': { $gte: ?0 } }")

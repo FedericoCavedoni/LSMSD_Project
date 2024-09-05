@@ -56,29 +56,28 @@ public interface MatchRepository extends MongoRepository<Match, String> {
     List<TopAvgPlayersStatistic> findUsersWithHighestAvgNumGiocatori(Integer limit, Integer minMatches);
 
     @Aggregation(pipeline = {
-            "{ $match: { 'gameId': ?0 } }",  // Filtra per gameId
+            "{ $match: { 'gameId': ?0 } }",
             "{ $group: { _id: '$user', totalMatches: { $sum: 1 }, totalWins: { $sum: { $cond: ['$result', 1, 0] } }, game: { $first: '$game' } } }",
-            "{ $addFields: { winRate: { $divide: ['$totalWins', '$totalMatches'] } } }",
-            "{ $sort: { winRate: -1 } }",  // Ordina per winrate decrescente
-            "{ $limit: 1 }",  // Limita il risultato al top player
+            "{ $addFields: { winRate: { $multiply: [ { $divide: ['$totalWins', '$totalMatches'] }, 100 ] } } }",
+            "{ $sort: { winRate: -1 } }",
+            "{ $limit: 1 }",
             "{ $project: { _id: 0, user: '$_id', game: 1, winRate: 1, totalMatches: 1 } }"
     })
     TopPlayerStatistic findTopPlayerByGameId(long gameId);
 
-    // Metodo per trovare il gioco con il maggior numero di partite giocate
     @Aggregation(pipeline = {
             "{ $group: { _id: '$game', totalMatches: { $sum: 1 } } }",
-            "{ $sort: { totalMatches: -1 } }",  // Ordina per numero di partite giocate in modo decrescente
-            "{ $limit: 1 }",  // Limita il risultato al top game
+            "{ $sort: { totalMatches: -1 } }",
+            "{ $limit: 1 }",
             "{ $project: { _id: 0, game: '$_id', totalMatches: 1 } }"
     })
     TopGameStatistic findMostPlayedGameByMatches();
 
-    // Metodo per trovare il gioco con il maggior tempo totale giocato
+
     @Aggregation(pipeline = {
             "{ $group: { _id: '$game', totalTimePlayed: { $sum: '$duration' } } }",
-            "{ $sort: { totalTimePlayed: -1 } }",  // Ordina per tempo totale giocato in modo decrescente
-            "{ $limit: 1 }",  // Limita il risultato al top game
+            "{ $sort: { totalTimePlayed: -1 } }",
+            "{ $limit: 1 }",
             "{ $project: { _id: 0, game: '$_id', totalTimePlayed: 1 } }"
     })
     TopGameStatistic findMostPlayedGameByTime();
