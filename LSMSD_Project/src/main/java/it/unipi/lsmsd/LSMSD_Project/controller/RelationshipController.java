@@ -181,8 +181,9 @@ public class RelationshipController {
             List<UserNode> followedUsers = relationshipService.getTopFollowedUsers(currentUser.getUsername(), n);
             return new ResponseEntity<>(followedUsers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Errore: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 
     @GetMapping("/topBoardGames")
