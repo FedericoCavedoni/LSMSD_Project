@@ -5,6 +5,8 @@ import it.unipi.lsmsd.LSMSD_Project.dao.MatchRepository;
 import it.unipi.lsmsd.LSMSD_Project.dao.ReviewRepository;
 import it.unipi.lsmsd.LSMSD_Project.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -99,5 +101,19 @@ public class MatchService {
     public TopGameStatistic getMostPlayedGameByTime() {
         return matchRepository.findMostPlayedGameByTime();
     }
+
+    public List<Match> getMatchesByGameId(long gameId, int limit) {
+
+        Pageable pageable = PageRequest.of(0, limit);
+        return matchRepository.findByGameIdWithLimit(gameId, pageable);
+    }
+
+    public List<Match> getMatchesByUserAndGame(String user, long gameId, int limit) {
+        List<Match> matches = matchRepository.findByUserAndGameId(user, gameId);
+        return matches.stream()
+                .limit(limit)
+                .collect(Collectors.toList());
+    }
+
 
 }

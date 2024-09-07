@@ -187,4 +187,28 @@ public class MatchController {
         }
     }
 
+    @GetMapping("/getMatchesByGameId")
+    public ResponseEntity<List<Match>> getMatchesByGameId(@RequestParam long gameId, @RequestParam(defaultValue = "10") int limit) {
+        List<Match> matches = matchService.getMatchesByGameId(gameId, limit);
+        if (!matches.isEmpty()) {
+            return ResponseEntity.ok(matches);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @GetMapping("/getByUserAndGame")
+    public ResponseEntity<List<Match>> getMatchesByUserAndGame(
+            @RequestParam String user,
+            @RequestParam long gameId,
+            @RequestParam(required = false, defaultValue = "10") int limit) {
+
+        List<Match> matches = matchService.getMatchesByUserAndGame(user, gameId, limit);
+        if (!matches.isEmpty()) {
+            return ResponseEntity.ok(matches);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package it.unipi.lsmsd.LSMSD_Project.dao;
 
 import it.unipi.lsmsd.LSMSD_Project.model.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -9,6 +10,7 @@ import java.util.List;
 
 public interface MatchRepository extends MongoRepository<Match, String> {
     List<Match> findByUser(String user);
+    List<Match> findByUserAndGameId(String user, long gameId);
 
 
     @Aggregation(pipeline = {
@@ -86,4 +88,11 @@ public interface MatchRepository extends MongoRepository<Match, String> {
 
     @Query("{ 'date': { $gte: ?0 } }")
     List<Match> findMatchesAfterDate(String date);
+
+    @Query(value = "{ 'gameId': ?0 }")
+    List<Match> findByGameIdWithLimit(long gameId, Pageable pageable);
+
+
+
+
 }
