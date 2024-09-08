@@ -211,4 +211,20 @@ public class MatchController {
         }
     }
 
+    @GetMapping("/getLoggedUserStatistics")
+    public ResponseEntity<?> getLoggedUserStatistics(HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser != null) {
+            UserGameStatistic statistic = matchService.getStatisticsByUser(currentUser.getUsername());
+            if (statistic != null) {
+                return ResponseEntity.ok(statistic);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+
 }

@@ -92,6 +92,15 @@ public interface MatchRepository extends MongoRepository<Match, String> {
     @Query(value = "{ 'gameId': ?0 }")
     List<Match> findByGameIdWithLimit(long gameId, Pageable pageable);
 
+    @Aggregation(pipeline = {
+            "{ $match: { 'user': ?0 } }",
+            "{ $group: { _id: '$user', totalMatches: { $sum: 1 }, totalWins: { $sum: { $cond: ['$result', 1, 0] } }, mostPlayedGame: { $first: '$game' }, leastPlayedGame: { $last: '$game' } } }",
+            "{ $addFields: { winRate: { $multiply: [ { $divide: ['$totalWins', '$totalMatches'] }, 100 ] } } }",
+            "{ $project: { _id: 0, user: '$_id', totalMatches: 1, winRate: 1, mostPlayedGame: 1, leastPlayedGame: 1 } }"
+    })
+    UserGameStatistic findStatisticsByUser(String username);
+
+
 
 
 

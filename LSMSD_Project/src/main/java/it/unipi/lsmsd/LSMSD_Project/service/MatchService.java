@@ -115,5 +115,10 @@ public class MatchService {
                 .collect(Collectors.toList());
     }
 
+    public UserGameStatistic getStatisticsByUser(String username) {
+        return matchRepository.findStatisticsByUser(username);
+    }
+
+
 
 }
