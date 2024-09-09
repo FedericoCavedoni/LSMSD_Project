@@ -23,13 +23,22 @@ public class MatchController {
     @PostMapping("/add")
     public ResponseEntity<?> addMatch(@RequestBody Match match, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
-        if (currentUser != null) {
-            Match newMatch = matchService.addMatch(match);
-            return ResponseEntity.ok(newMatch);
-        } else {
-            return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
+
+        if (currentUser == null) {
+            return new ResponseEntity<>("Operazione non autorizzata: Utente non autenticato.", HttpStatus.UNAUTHORIZED);
         }
+
+        match.setUser(currentUser.getUsername());
+
+        if (!match.getUser().equals(currentUser.getUsername())) {
+            return new ResponseEntity<>("Operazione non autorizzata: Non puoi aggiungere un match per un altro utente.", HttpStatus.UNAUTHORIZED);
+        }
+
+        Match newMatch = matchService.addMatch(match);
+
+        return ResponseEntity.ok(newMatch);
     }
+
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllMatches(HttpSession session) {
