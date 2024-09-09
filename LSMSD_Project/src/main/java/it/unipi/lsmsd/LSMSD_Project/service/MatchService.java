@@ -109,11 +109,10 @@ public class MatchService {
     }
 
     public List<Match> getMatchesByUserAndGame(String user, long gameId, int limit) {
-        List<Match> matches = matchRepository.findByUserAndGameId(user, gameId);
-        return matches.stream()
-                .limit(limit)
-                .collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(0, limit);
+        return matchRepository.findByUserAndGameIdWithLimit(user, gameId, pageable);
     }
+
 
     public UserGameStatistic getStatisticsByUser(String username) {
         return matchRepository.findStatisticsByUser(username);

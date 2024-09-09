@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface MatchRepository extends MongoRepository<Match, String> {
     List<Match> findByUser(String user);
-    List<Match> findByUserAndGameId(String user, long gameId);
 
 
     @Aggregation(pipeline = {
@@ -91,6 +90,10 @@ public interface MatchRepository extends MongoRepository<Match, String> {
 
     @Query(value = "{ 'gameId': ?0 }")
     List<Match> findByGameIdWithLimit(long gameId, Pageable pageable);
+
+    @Query("{ 'user': ?0, 'gameId': ?1 }")
+    List<Match> findByUserAndGameIdWithLimit(String user, long gameId, Pageable pageable);
+
 
     @Aggregation(pipeline = {
             "{ $match: { 'user': ?0 } }",

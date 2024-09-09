@@ -208,17 +208,39 @@ public class MatchController {
 
     @GetMapping("/getByUserAndGame")
     public ResponseEntity<List<Match>> getMatchesByUserAndGame(
-            @RequestParam String user,
+            @RequestParam(required = false) String user,
             @RequestParam long gameId,
-            @RequestParam(required = false, defaultValue = "10") int limit) {
+            @RequestParam(required = false, defaultValue = "10") int limit,
+            HttpSession session) {
+
+        User currentUser = (User) session.getAttribute("user");
+
+        if (currentUser == null) {
+
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        if (user != null && !currentUser.getUsername().equals(user) && !currentUser.isAdmin()) {
+
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        if (user == null) {
+            user = currentUser.getUsername();
+        }
 
         List<Match> matches = matchService.getMatchesByUserAndGame(user, gameId, limit);
+
         if (!matches.isEmpty()) {
             return ResponseEntity.ok(matches);
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
+
+
 
     @GetMapping("/getLoggedUserStatistics")
     public ResponseEntity<?> getLoggedUserStatistics(HttpSession session) {
