@@ -94,12 +94,12 @@ public class MatchService {
         return matchRepository.findTopPlayerByGameId(gameId);
     }
 
-    public TopGameStatistic getMostPlayedGameByMatches() {
-        return matchRepository.findMostPlayedGameByMatches();
+    public List<TopGameStatistic> getMostPlayedGameByMatches(int limit) {
+        return matchRepository.findMostPlayedGameByMatches(limit);  // Ritorna una lista di TopGameStatistic
     }
 
-    public TopGameStatistic getMostPlayedGameByTime() {
-        return matchRepository.findMostPlayedGameByTime();
+    public List<TopGameStatistic> getMostPlayedGameByTime(int limit) {
+        return matchRepository.findMostPlayedGameByTime(limit);
     }
 
     public List<Match> getMatchesByGameId(long gameId, int limit) {

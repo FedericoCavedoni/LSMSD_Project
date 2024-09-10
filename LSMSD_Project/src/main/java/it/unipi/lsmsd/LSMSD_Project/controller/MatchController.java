@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -168,29 +169,38 @@ public class MatchController {
     }
 
     @GetMapping("/mostPlayedGameByMatches")
-    public ResponseEntity<Map<String, Object>> getMostPlayedGameByMatches() {
-        TopGameStatistic topGame = matchService.getMostPlayedGameByMatches();
-        if (topGame != null) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("game", topGame.getGame());
-            response.put("totalMatches", topGame.getTotalMatches());
+    public ResponseEntity<List<Map<String, Object>>> getMostPlayedGameByMatches(
+            @RequestParam(defaultValue = "5") int limit) {
+        List<TopGameStatistic> topGames = matchService.getMostPlayedGameByMatches(limit);
 
-            return ResponseEntity.ok(response);
+        if (!topGames.isEmpty()) {
+            List<Map<String, Object>> responseList = new ArrayList<>();
+            for (TopGameStatistic topGame : topGames) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("game", topGame.getGame());
+                response.put("totalMatches", topGame.getTotalMatches());
+                responseList.add(response);
+            }
+            return ResponseEntity.ok(responseList);  // Restituisce la lista di giochi
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-
     @GetMapping("/mostPlayedGameByTime")
-    public ResponseEntity<Map<String, Object>> getMostPlayedGameByTime() {
-        TopGameStatistic topGame = matchService.getMostPlayedGameByTime();
-        if (topGame != null) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("game", topGame.getGame());
-            response.put("totalTimePlayed", topGame.getTotalTimePlayed());
+    public ResponseEntity<List<Map<String, Object>>> getMostPlayedGameByTime(
+            @RequestParam(defaultValue = "5") int limit) {
+        List<TopGameStatistic> topGames = matchService.getMostPlayedGameByTime(limit);
 
-            return ResponseEntity.ok(response);
+        if (!topGames.isEmpty()) {
+            List<Map<String, Object>> responseList = new ArrayList<>();
+            for (TopGameStatistic topGame : topGames) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("game", topGame.getGame());
+                response.put("totalTimePlayed", topGame.getTotalTimePlayed());
+                responseList.add(response);
+            }
+            return ResponseEntity.ok(responseList);
         } else {
             return ResponseEntity.notFound().build();
         }

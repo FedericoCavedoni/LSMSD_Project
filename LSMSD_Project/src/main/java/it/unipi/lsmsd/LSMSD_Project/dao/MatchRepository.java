@@ -69,19 +69,21 @@ public interface MatchRepository extends MongoRepository<Match, String> {
     @Aggregation(pipeline = {
             "{ $group: { _id: '$game', totalMatches: { $sum: 1 } } }",
             "{ $sort: { totalMatches: -1 } }",
-            "{ $limit: 1 }",
+            "{ $limit: ?0 }",  // Usa il parametro limit
             "{ $project: { _id: 0, game: '$_id', totalMatches: 1 } }"
     })
-    TopGameStatistic findMostPlayedGameByMatches();
+    List<TopGameStatistic> findMostPlayedGameByMatches(int limit);
+
 
 
     @Aggregation(pipeline = {
             "{ $group: { _id: '$game', totalTimePlayed: { $sum: '$duration' } } }",
             "{ $sort: { totalTimePlayed: -1 } }",
-            "{ $limit: 1 }",
+            "{ $limit: ?0 }",
             "{ $project: { _id: 0, game: '$_id', totalTimePlayed: 1 } }"
     })
-    TopGameStatistic findMostPlayedGameByTime();
+    List<TopGameStatistic> findMostPlayedGameByTime(int limit);
+
 
 
     List<Match> findByGameId(Long gameId);
