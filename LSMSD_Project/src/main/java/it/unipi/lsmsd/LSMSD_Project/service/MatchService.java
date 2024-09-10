@@ -90,9 +90,10 @@ public class MatchService {
 
 
 
-    public TopPlayerStatistic getTopPlayerByGameId(long gameId) {
-        return matchRepository.findTopPlayerByGameId(gameId);
+    public TopPlayerStatistic getTopPlayerByGameId(long gameId, int minMatches) {
+        return matchRepository.findTopPlayerByGameId(gameId, minMatches);
     }
+
 
     public List<TopGameStatistic> getMostPlayedGameByMatches(int limit) {
         return matchRepository.findMostPlayedGameByMatches(limit);  // Ritorna una lista di TopGameStatistic

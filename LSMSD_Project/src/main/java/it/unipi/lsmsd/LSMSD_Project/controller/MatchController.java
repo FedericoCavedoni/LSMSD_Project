@@ -159,14 +159,19 @@ public class MatchController {
     }
 
     @GetMapping("/topPlayerByGame")
-    public ResponseEntity<TopPlayerStatistic> getTopPlayerByGameId(@RequestParam long gameId) {
-        TopPlayerStatistic topPlayer = matchService.getTopPlayerByGameId(gameId);
+    public ResponseEntity<TopPlayerStatistic> getTopPlayerByGameId(
+            @RequestParam long gameId,
+            @RequestParam(required = false, defaultValue = "3") int minMatches) {
+
+        TopPlayerStatistic topPlayer = matchService.getTopPlayerByGameId(gameId, minMatches);
+
         if (topPlayer != null) {
             return ResponseEntity.ok(topPlayer);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
 
     @GetMapping("/mostPlayedGameByMatches")
     public ResponseEntity<List<Map<String, Object>>> getMostPlayedGameByMatches(
