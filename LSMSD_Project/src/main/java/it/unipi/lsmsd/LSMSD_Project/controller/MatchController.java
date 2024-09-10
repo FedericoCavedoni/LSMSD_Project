@@ -240,8 +240,6 @@ public class MatchController {
 
 
 
-
-
     @GetMapping("/getLoggedUserStatistics")
     public ResponseEntity<?> getLoggedUserStatistics(HttpSession session) {
         User currentUser = (User) session.getAttribute("user");

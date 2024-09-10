@@ -59,6 +59,7 @@ public interface MatchRepository extends MongoRepository<Match, String> {
             "{ $match: { 'gameId': ?0 } }",
             "{ $group: { _id: '$user', totalMatches: { $sum: 1 }, totalWins: { $sum: { $cond: ['$result', 1, 0] } }, game: { $first: '$game' } } }",
             "{ $addFields: { winRate: { $multiply: [ { $divide: ['$totalWins', '$totalMatches'] }, 100 ] } } }",
+            "{ $match: { totalMatches: { $gte: 3 } } }",
             "{ $sort: { winRate: -1 } }",
             "{ $limit: 1 }",
             "{ $project: { _id: 0, user: '$_id', game: 1, winRate: 1, totalMatches: 1 } }"
