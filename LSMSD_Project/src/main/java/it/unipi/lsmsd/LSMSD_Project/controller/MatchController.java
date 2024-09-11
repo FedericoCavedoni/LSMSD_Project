@@ -31,7 +31,7 @@ public class MatchController {
 
         match.setUser(currentUser.getUsername());
 
-        if (!match.getUser().equals(currentUser.getUsername())) {
+        if (currentUser.getUsername() != match.getUser()) {
             return new ResponseEntity<>("Operazione non autorizzata: Non puoi aggiungere un match per un altro utente.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -42,10 +42,10 @@ public class MatchController {
 
 
     @GetMapping("/getAll")
-    public ResponseEntity<?> getAllMatches(HttpSession session) {
+    public ResponseEntity<?> getAllMatches(HttpSession session, @RequestParam(required = false) int limit) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser != null && currentUser.isAdmin()) {
-            List<Match> matches = matchService.getAllMatches();
+            List<Match> matches = matchService.getAllMatches(limit);
             if (!matches.isEmpty()) {
                 return ResponseEntity.ok(matches);
             } else {

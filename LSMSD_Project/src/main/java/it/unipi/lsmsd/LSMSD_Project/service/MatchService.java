@@ -7,6 +7,8 @@ import it.unipi.lsmsd.LSMSD_Project.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,12 +26,15 @@ public class MatchService {
     @Autowired
     private BoardGameRepository boardGameRepository;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     public Match addMatch(Match match) {
         return matchRepository.save(match);
     }
 
-    public List<Match> getAllMatches() {
-        return matchRepository.findAll();
+    public List<Match> getAllMatches(int limit) {
+        return matchRepository.findAll(PageRequest.of(0, limit)).getContent();
     }
 
     public List<Match> getMatchesByUser(String user) {

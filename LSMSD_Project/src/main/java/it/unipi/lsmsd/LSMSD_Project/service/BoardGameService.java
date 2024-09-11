@@ -58,7 +58,7 @@ public class BoardGameService {
             BoardGame savedBoardGame = boardGameRepository.save(existingBoardGame);
 
             BoardGameNode boardGameNode = new BoardGameNode();
-            boardGameNode.setGameId(savedBoardGame.getGameId());
+            boardGameNode.setId(savedBoardGame.getGameId());
             boardGameNode.setName(savedBoardGame.getName());
             boardGameNodeRepository.save(boardGameNode);
 

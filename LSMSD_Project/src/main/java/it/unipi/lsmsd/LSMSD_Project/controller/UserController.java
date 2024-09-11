@@ -155,7 +155,7 @@ public class UserController {
     @PutMapping("/profile/update")
     public ResponseEntity<?> updateUserProfile(HttpSession session, @RequestBody User updatedUser) {
         User currentUser = (User) session.getAttribute("user");
-        if (currentUser != null) {
+        if (currentUser != null || currentUser.getUsername() != updatedUser.getUsername()) {
             User user = userService.updateUserProfile(updatedUser, currentUser.getUsername());
             if (user != null) {
                 session.setAttribute("user", user);
