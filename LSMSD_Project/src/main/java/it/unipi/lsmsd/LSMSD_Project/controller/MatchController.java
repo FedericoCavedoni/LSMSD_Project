@@ -28,12 +28,12 @@ public class MatchController {
         if (currentUser == null) {
             return new ResponseEntity<>("Operazione non autorizzata: Utente non autenticato.", HttpStatus.UNAUTHORIZED);
         }
-
-        match.setUser(currentUser.getUsername());
-
         if (currentUser.getUsername() != match.getUser()) {
             return new ResponseEntity<>("Operazione non autorizzata: Non puoi aggiungere un match per un altro utente.", HttpStatus.UNAUTHORIZED);
         }
+        match.setUser(currentUser.getUsername());
+
+
 
         Match newMatch = matchService.addMatch(match);
 
