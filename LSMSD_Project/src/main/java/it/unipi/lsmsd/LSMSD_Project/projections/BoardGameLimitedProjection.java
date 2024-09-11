@@ -9,6 +9,5 @@ public interface BoardGameLimitedProjection {
     int getMaxPlayers();
     float getRating();
     int getPlayingTime();
-    List<String> getReviews();
     List<String> getMechanics();
 }
