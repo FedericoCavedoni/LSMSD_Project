@@ -109,9 +109,9 @@ public class MatchService {
         return matchRepository.findByGameIdWithLimit(gameId, pageable);
     }
 
-    public List<Match> getMatchesByUserAndGame(String user, long gameId, int limit) {
+    public List<Match> getMatchesByUserAndGame(String username, long gameId, int limit) {
         Pageable pageable = PageRequest.of(0, limit);
-        return matchRepository.findByUserAndGameIdWithLimit(user, gameId, pageable);
+        return matchRepository.findByUserAndGameIdWithLimit(username, gameId, pageable);
     }
 
 
