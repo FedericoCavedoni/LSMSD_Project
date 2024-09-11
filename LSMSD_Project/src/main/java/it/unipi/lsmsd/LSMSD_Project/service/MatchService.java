@@ -90,16 +90,17 @@ public class MatchService {
 
 
 
-    public TopPlayerStatistic getTopPlayerByGameId(long gameId) {
-        return matchRepository.findTopPlayerByGameId(gameId);
+    public TopPlayerStatistic getTopPlayerByGameId(long gameId, int minMatches) {
+        return matchRepository.findTopPlayerByGameId(gameId, minMatches);
     }
 
-    public TopGameStatistic getMostPlayedGameByMatches() {
-        return matchRepository.findMostPlayedGameByMatches();
+
+    public List<TopGameStatistic> getMostPlayedGameByMatches(int limit) {
+        return matchRepository.findMostPlayedGameByMatches(limit);  // Ritorna una lista di TopGameStatistic
     }
 
-    public TopGameStatistic getMostPlayedGameByTime() {
-        return matchRepository.findMostPlayedGameByTime();
+    public List<TopGameStatistic> getMostPlayedGameByTime(int limit) {
+        return matchRepository.findMostPlayedGameByTime(limit);
     }
 
     public List<Match> getMatchesByGameId(long gameId, int limit) {
@@ -109,11 +110,10 @@ public class MatchService {
     }
 
     public List<Match> getMatchesByUserAndGame(String user, long gameId, int limit) {
-        List<Match> matches = matchRepository.findByUserAndGameId(user, gameId);
-        return matches.stream()
-                .limit(limit)
-                .collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(0, limit);
+        return matchRepository.findByUserAndGameIdWithLimit(user, gameId, pageable);
     }
+
 
     public UserGameStatistic getStatisticsByUser(String username) {
         return matchRepository.findStatisticsByUser(username);

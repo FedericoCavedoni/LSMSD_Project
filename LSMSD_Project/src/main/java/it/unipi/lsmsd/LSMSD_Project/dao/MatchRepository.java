@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface MatchRepository extends MongoRepository<Match, String> {
     List<Match> findByUser(String user);
-    List<Match> findByUserAndGameId(String user, long gameId);
 
 
     @Aggregation(pipeline = {
@@ -60,28 +59,32 @@ public interface MatchRepository extends MongoRepository<Match, String> {
             "{ $match: { 'gameId': ?0 } }",
             "{ $group: { _id: '$user', totalMatches: { $sum: 1 }, totalWins: { $sum: { $cond: ['$result', 1, 0] } }, game: { $first: '$game' } } }",
             "{ $addFields: { winRate: { $multiply: [ { $divide: ['$totalWins', '$totalMatches'] }, 100 ] } } }",
+            "{ $match: { totalMatches: { $gte: ?1 } } }",
             "{ $sort: { winRate: -1 } }",
             "{ $limit: 1 }",
             "{ $project: { _id: 0, user: '$_id', game: 1, winRate: 1, totalMatches: 1 } }"
     })
-    TopPlayerStatistic findTopPlayerByGameId(long gameId);
+    TopPlayerStatistic findTopPlayerByGameId(long gameId, int minMatches);
+
 
     @Aggregation(pipeline = {
             "{ $group: { _id: '$game', totalMatches: { $sum: 1 } } }",
             "{ $sort: { totalMatches: -1 } }",
-            "{ $limit: 1 }",
+            "{ $limit: ?0 }",  // Usa il parametro limit
             "{ $project: { _id: 0, game: '$_id', totalMatches: 1 } }"
     })
-    TopGameStatistic findMostPlayedGameByMatches();
+    List<TopGameStatistic> findMostPlayedGameByMatches(int limit);
+
 
 
     @Aggregation(pipeline = {
             "{ $group: { _id: '$game', totalTimePlayed: { $sum: '$duration' } } }",
             "{ $sort: { totalTimePlayed: -1 } }",
-            "{ $limit: 1 }",
+            "{ $limit: ?0 }",
             "{ $project: { _id: 0, game: '$_id', totalTimePlayed: 1 } }"
     })
-    TopGameStatistic findMostPlayedGameByTime();
+    List<TopGameStatistic> findMostPlayedGameByTime(int limit);
+
 
 
     List<Match> findByGameId(Long gameId);
@@ -91,6 +94,10 @@ public interface MatchRepository extends MongoRepository<Match, String> {
 
     @Query(value = "{ 'gameId': ?0 }")
     List<Match> findByGameIdWithLimit(long gameId, Pageable pageable);
+
+    @Query("{ 'user': ?0, 'gameId': ?1 }")
+    List<Match> findByUserAndGameIdWithLimit(String user, long gameId, Pageable pageable);
+
 
     @Aggregation(pipeline = {
             "{ $match: { 'user': ?0 } }",

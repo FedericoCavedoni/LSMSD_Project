@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +24,22 @@ public class MatchController {
     @PostMapping("/add")
     public ResponseEntity<?> addMatch(@RequestBody Match match, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
-        if (currentUser != null) {
-            Match newMatch = matchService.addMatch(match);
-            return ResponseEntity.ok(newMatch);
-        } else {
-            return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
+
+        if (currentUser == null) {
+            return new ResponseEntity<>("Operazione non autorizzata: Utente non autenticato.", HttpStatus.UNAUTHORIZED);
         }
+
+        match.setUser(currentUser.getUsername());
+
+        if (!match.getUser().equals(currentUser.getUsername())) {
+            return new ResponseEntity<>("Operazione non autorizzata: Non puoi aggiungere un match per un altro utente.", HttpStatus.UNAUTHORIZED);
+        }
+
+        Match newMatch = matchService.addMatch(match);
+
+        return ResponseEntity.ok(newMatch);
     }
+
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllMatches(HttpSession session) {
@@ -149,8 +159,12 @@ public class MatchController {
     }
 
     @GetMapping("/topPlayerByGame")
-    public ResponseEntity<TopPlayerStatistic> getTopPlayerByGameId(@RequestParam long gameId) {
-        TopPlayerStatistic topPlayer = matchService.getTopPlayerByGameId(gameId);
+    public ResponseEntity<TopPlayerStatistic> getTopPlayerByGameId(
+            @RequestParam long gameId,
+            @RequestParam(required = false, defaultValue = "3") int minMatches) {
+
+        TopPlayerStatistic topPlayer = matchService.getTopPlayerByGameId(gameId, minMatches);
+
         if (topPlayer != null) {
             return ResponseEntity.ok(topPlayer);
         } else {
@@ -158,30 +172,40 @@ public class MatchController {
         }
     }
 
-    @GetMapping("/mostPlayedGameByMatches")
-    public ResponseEntity<Map<String, Object>> getMostPlayedGameByMatches() {
-        TopGameStatistic topGame = matchService.getMostPlayedGameByMatches();
-        if (topGame != null) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("game", topGame.getGame());
-            response.put("totalMatches", topGame.getTotalMatches());
 
-            return ResponseEntity.ok(response);
+    @GetMapping("/mostPlayedGameByMatches")
+    public ResponseEntity<List<Map<String, Object>>> getMostPlayedGameByMatches(
+            @RequestParam(defaultValue = "5") int limit) {
+        List<TopGameStatistic> topGames = matchService.getMostPlayedGameByMatches(limit);
+
+        if (!topGames.isEmpty()) {
+            List<Map<String, Object>> responseList = new ArrayList<>();
+            for (TopGameStatistic topGame : topGames) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("game", topGame.getGame());
+                response.put("totalMatches", topGame.getTotalMatches());
+                responseList.add(response);
+            }
+            return ResponseEntity.ok(responseList);  // Restituisce la lista di giochi
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-
     @GetMapping("/mostPlayedGameByTime")
-    public ResponseEntity<Map<String, Object>> getMostPlayedGameByTime() {
-        TopGameStatistic topGame = matchService.getMostPlayedGameByTime();
-        if (topGame != null) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("game", topGame.getGame());
-            response.put("totalTimePlayed", topGame.getTotalTimePlayed());
+    public ResponseEntity<List<Map<String, Object>>> getMostPlayedGameByTime(
+            @RequestParam(defaultValue = "5") int limit) {
+        List<TopGameStatistic> topGames = matchService.getMostPlayedGameByTime(limit);
 
-            return ResponseEntity.ok(response);
+        if (!topGames.isEmpty()) {
+            List<Map<String, Object>> responseList = new ArrayList<>();
+            for (TopGameStatistic topGame : topGames) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("game", topGame.getGame());
+                response.put("totalTimePlayed", topGame.getTotalTimePlayed());
+                responseList.add(response);
+            }
+            return ResponseEntity.ok(responseList);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -199,17 +223,38 @@ public class MatchController {
 
     @GetMapping("/getByUserAndGame")
     public ResponseEntity<List<Match>> getMatchesByUserAndGame(
-            @RequestParam String user,
+            @RequestParam(required = false) String user,
             @RequestParam long gameId,
-            @RequestParam(required = false, defaultValue = "10") int limit) {
+            @RequestParam(required = false, defaultValue = "10") int limit,
+            HttpSession session) {
+
+        User currentUser = (User) session.getAttribute("user");
+        
+
+        if (currentUser == null) {
+
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        if (user != null && !currentUser.getUsername().equals(user) && !currentUser.isAdmin()) {
+
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        if (user == null) {
+            user = currentUser.getUsername();
+        }
 
         List<Match> matches = matchService.getMatchesByUserAndGame(user, gameId, limit);
+
         if (!matches.isEmpty()) {
             return ResponseEntity.ok(matches);
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
 
     @GetMapping("/getLoggedUserStatistics")
     public ResponseEntity<?> getLoggedUserStatistics(HttpSession session) {

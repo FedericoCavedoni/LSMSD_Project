@@ -144,17 +144,12 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile(@RequestParam String username, HttpSession session) {
-        User currentUser = (User) session.getAttribute("user");
-        if (currentUser != null) {
             UserProfileProjection user = userService.getUserProfile(username);
             if (user != null) {
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
             }
-        } else {
-            return new ResponseEntity<>("Operazione non autorizzata", HttpStatus.UNAUTHORIZED);
-        }
     }
 
     @PutMapping("/profile/update")
