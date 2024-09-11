@@ -229,6 +229,7 @@ public class MatchController {
             HttpSession session) {
 
         User currentUser = (User) session.getAttribute("user");
+        
 
         if (currentUser == null) {
 
