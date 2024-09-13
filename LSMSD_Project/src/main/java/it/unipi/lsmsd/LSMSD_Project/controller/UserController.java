@@ -1,10 +1,12 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
+import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
 import it.unipi.lsmsd.LSMSD_Project.model.Game;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.projections.UserOnlyUsernameProjection;
 import it.unipi.lsmsd.LSMSD_Project.projections.UserProfileProjection;
 import it.unipi.lsmsd.LSMSD_Project.projections.UserUsernameProjection;
+import it.unipi.lsmsd.LSMSD_Project.service.BoardGameService;
 import it.unipi.lsmsd.LSMSD_Project.service.UserService;
 import it.unipi.lsmsd.LSMSD_Project.utils.UserAlreadyExistsException;
 import it.unipi.lsmsd.LSMSD_Project.utils.InvalidCredentialsException;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpSession;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private BoardGameService boardGameService;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user, HttpSession session) {
@@ -94,7 +100,8 @@ public class UserController {
     public ResponseEntity<?> getCurrentUser(HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser != null) {
-            return new ResponseEntity<>(currentUser, HttpStatus.OK);
+            User user = userService.getUserByUsername(currentUser.getUsername());
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
         }
@@ -102,7 +109,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public ResponseEntity<String> logoutUser(HttpSession session) {
-        session.invalidate(); // Invalida la sessione corrente
+        session.invalidate();
         return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
     }
     @DeleteMapping("/deleteAccount")
@@ -177,5 +184,50 @@ public class UserController {
             return new ResponseEntity<>("User not found or library is empty", HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/addLibrary")
+    public ResponseEntity<?> addGameToLibrary(@RequestParam Long gameId, HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser != null) {
+            BoardGame boardGame = boardGameService.getBoardGameByGameId(gameId);
+            if (boardGame == null) {
+                return new ResponseEntity<>("Game not found", HttpStatus.NOT_FOUND);
+            }
+
+            Game game = new Game(boardGame.getGameId(), boardGame.getName());
+
+            if(userService.addGameToLibrary(currentUser.getUsername(), game)){
+                return new ResponseEntity<>("Game added to library", HttpStatus.OK);
+            }
+
+            return new ResponseEntity<>("Game already in library", HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @DeleteMapping("/removeLibrary")
+    public ResponseEntity<?> removeGameFromLibrary(@RequestParam Long gameId, HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser != null) {
+            BoardGame boardGame = boardGameService.getBoardGameByGameId(gameId);
+            if (boardGame == null) {
+                return new ResponseEntity<>("Game not found", HttpStatus.NOT_FOUND);
+            }
+
+            Game game = new Game(boardGame.getGameId(), boardGame.getName());
+
+            if(userService.removeGameFromLibrary(currentUser.getUsername(), game)){
+                return new ResponseEntity<>("Game removed from library", HttpStatus.OK);
+            }
+
+            return new ResponseEntity<>("Game not in library", HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+
+
 }
 

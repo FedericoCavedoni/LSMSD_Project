@@ -9,4 +9,11 @@ public class Game {
     private long gameId;
 
     private String name;
+
+    public Game(long gameId, String name) {
+        this.gameId = gameId;
+        this.name = name;
+    }
+
+    public Game() {}
 }

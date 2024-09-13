@@ -1,5 +1,6 @@
 package it.unipi.lsmsd.LSMSD_Project.model;
 
+import it.unipi.lsmsd.LSMSD_Project.projections.ReviewProjection;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -61,4 +62,9 @@ public class BoardGame {
 
     @Field(name = "averageplayingtime")
     private float averagePlayingTime;
+
+    @Field(name = "filteredReviews")
+    private List<FilteredReview> filteredReviews;
+
+
 }

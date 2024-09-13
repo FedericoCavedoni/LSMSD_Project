@@ -17,6 +17,7 @@ import it.unipi.lsmsd.LSMSD_Project.utils.InvalidCredentialsException;
 import org.springframework.transaction.annotation.Transactional;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -107,4 +108,50 @@ public class UserService {
         return null;
     }
 
+    public boolean addGameToLibrary(String username, Game game) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            return false;
+        }
+
+        List<Game> library = user.getLibrary();
+
+        if (library == null) {
+            library = new ArrayList<>();
+        }
+
+        if (library.contains(game)) {
+            return false;
+        }
+
+        library.add(game);
+
+        user.setLibrary(library);
+        userRepository.save(user);
+        return true;
+    }
+
+    public boolean removeGameFromLibrary(String username, Game game) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            return false;
+        }
+
+        List<Game> library = user.getLibrary();
+
+        if (library == null) {
+            library = new ArrayList<>();
+        }
+
+        if (!library.contains(game)) {
+            return false;
+        }
+
+        library.remove(game);
+
+        user.setLibrary(library);
+
+        userRepository.save(user);
+        return true;
+    }
 }

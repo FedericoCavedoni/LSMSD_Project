@@ -35,13 +35,14 @@ public class BoardGameController {
     }
 
     @GetMapping("/getBoardGameByName")
-    public ResponseEntity<List<BoardGame>> getBoardGameByName(@RequestParam String name) {
-        List<BoardGame> boardGames = boardGameService.getBoardGameByName(name);
+    public ResponseEntity<List<BoardGameLimitedProjection>> getBoardGameByName(@RequestParam String name) {
+        List<BoardGameLimitedProjection> boardGames = boardGameService.getLimitedBoardGameByName(name);
         if (boardGames.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(boardGames);
     }
+
 
     @PutMapping("/updateBoardGame")
     public ResponseEntity<?> updateBoardGame(@RequestBody BoardGame updatedBoardGame, HttpSession session) {

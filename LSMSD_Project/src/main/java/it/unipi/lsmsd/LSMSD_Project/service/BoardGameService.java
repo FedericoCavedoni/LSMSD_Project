@@ -1,13 +1,12 @@
 package it.unipi.lsmsd.LSMSD_Project.service;
 
 import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameRepository;
+import it.unipi.lsmsd.LSMSD_Project.dao.ReviewRepository;
+import it.unipi.lsmsd.LSMSD_Project.model.*;
 import it.unipi.lsmsd.LSMSD_Project.projections.BoardGameLimitedProjection;
-import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
-import it.unipi.lsmsd.LSMSD_Project.model.BoardGameNode;
 import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameNodeRepository;
-import it.unipi.lsmsd.LSMSD_Project.model.Relation;
-import it.unipi.lsmsd.LSMSD_Project.model.Review;
 import it.unipi.lsmsd.LSMSD_Project.projections.BoardGameNameProjection;
+import it.unipi.lsmsd.LSMSD_Project.projections.ReviewProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,20 +22,19 @@ public class BoardGameService {
     @Autowired
     private BoardGameNodeRepository boardGameNodeRepository;
 
+    @Autowired
+    private ReviewRepository reviewRepository;
+
     public List<BoardGame> getAllBoardGames() {
         return boardGameRepository.findAll();
     }
 
 
 
-    public List<BoardGame> getBoardGameByName(String name) {
-        BoardGame exactMatch = boardGameRepository.findByName(name);
-        if (exactMatch != null) {
-            return List.of(exactMatch);
-        } else {
-            return boardGameRepository.findByNameContainingIgnoreCase(name);
-        }
+    public List<BoardGameLimitedProjection> getLimitedBoardGameByName(String name) {
+        return boardGameRepository.findLimitedBoardGameByName(name);
     }
+
 
     public BoardGame updateBoardGame(long id, BoardGame updatedBoardGame) {
         BoardGame existingBoardGame = boardGameRepository.findByGameId(id);
@@ -98,10 +96,26 @@ public class BoardGameService {
     public BoardGame getBoardGameDetailsWithReviews(long gameId) {
         BoardGame boardGame = boardGameRepository.findByGameId(gameId);
         if (boardGame != null) {
+            // Recupera le recensioni usando la proiezione
+            List<ReviewProjection> reviews = reviewRepository.findReviewsByGameId(gameId);
+
+            // Converte le recensioni in oggetti FilteredReview
+            List<FilteredReview> filteredReviews = reviews.stream()
+                    .filter(r -> r.getUsername() != null && r.getRating() != null) // Filtra eventuali campi nulli
+                    .map(r -> new FilteredReview(r.getUsername(), r.getRating(), r.getReviewText()))
+                    .collect(Collectors.toList());
+
+            // Imposta le recensioni filtrate nel boardGame (se necessario puoi aggiungere un setter per filteredReviews)
+            boardGame.setFilteredReviews(filteredReviews); // Questo richiede che BoardGame abbia un campo di tipo List<FilteredReview>.
+
             return boardGame;
         }
         return null;
     }
+
+
+
+
 
     public List<BoardGameLimitedProjection> getLimitedBoardGames(int limit) {
         return boardGameRepository.findLimitedBoardGames().stream()
@@ -121,7 +135,9 @@ public class BoardGameService {
         return boardGameRepository.findBoardGamesByMechanics(mechanics);
     }
 
-
+    public BoardGame getBoardGameByGameId(Long gameId) {
+        return boardGameRepository.findByGameId(gameId);
+    }
 
 
 }
