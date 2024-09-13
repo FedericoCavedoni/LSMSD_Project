@@ -3,7 +3,6 @@ package it.unipi.lsmsd.LSMSD_Project.service;
 import it.unipi.lsmsd.LSMSD_Project.dao.UserRepository;
 import it.unipi.lsmsd.LSMSD_Project.dao.UserNodeRepository;
 import it.unipi.lsmsd.LSMSD_Project.model.Game;
-import it.unipi.lsmsd.LSMSD_Project.model.Relation;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.model.UserNode;
 import it.unipi.lsmsd.LSMSD_Project.projections.UserOnlyUsernameProjection;
@@ -68,11 +67,7 @@ public class UserService {
     public UserOnlyUsernameProjection getOnlyUsernameByUsername(String username) {
         return userRepository.findOnlyUsernameByUsername(username);
     }
-
-    public List<Relation> getUserRelationships(String username, String relation, int num) {
-        return userNodeRepository.findUserRelationships(username, relation, num);
-    }
-
+    
     public UserProfileProjection getUserProfile(String username) {
         return userRepository.findUserProfileByUsername(username);
     }

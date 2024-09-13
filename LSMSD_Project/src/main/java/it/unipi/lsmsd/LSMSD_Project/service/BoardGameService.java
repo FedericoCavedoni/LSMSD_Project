@@ -89,9 +89,6 @@ public class BoardGameService {
         return false;
     }
 
-    public List<Relation> getBoardGameRelationships(String boardGameName, String relation, int num) {
-        return boardGameNodeRepository.findBoardGameRelationships(boardGameName, relation, num);
-    }
 
     public BoardGame getBoardGameDetailsWithReviews(long gameId) {
         BoardGame boardGame = boardGameRepository.findByGameId(gameId);
