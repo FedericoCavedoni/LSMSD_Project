@@ -1,14 +1,10 @@
 package it.unipi.lsmsd.LSMSD_Project.dao;
-import it.unipi.lsmsd.LSMSD_Project.model.Relation;
-import it.unipi.lsmsd.LSMSD_Project.model.User;
-import it.unipi.lsmsd.LSMSD_Project.model.UserNode;
-import it.unipi.lsmsd.LSMSD_Project.model.UserSimilarity;
+import it.unipi.lsmsd.LSMSD_Project.model.*;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.neo4j.repository.query.Query;
 import java.util.Optional;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public interface UserNodeRepository extends Neo4jRepository<UserNode, String> {
@@ -21,7 +17,7 @@ public interface UserNodeRepository extends Neo4jRepository<UserNode, String> {
             "RETURN u.username AS firstNode, type(r) AS relationType, " +
             "CASE WHEN n:User THEN n.username ELSE n.name END AS secondNode " +
             "LIMIT $limit")
-    List<Relation> findUserRelationships(String username, String relation, int limit);
+    List<BoardGameLike> findUserRelationships(String username, String relation, int limit);
     @Query("MATCH (f:User {username: $followerUsername}) " +
             "MATCH (e:User {username: $followeeUsername}) " +
             "MERGE (f)-[:FOLLOWS]->(e)")
@@ -51,6 +47,12 @@ public interface UserNodeRepository extends Neo4jRepository<UserNode, String> {
             "RETURN other.username AS username, commonGames " +
             "LIMIT $n")
     List<UserSimilarity> findMostSimilarUsers(String username, int n);
+    @Query("MATCH (u:User)<-[:FOLLOWS]-(follower:User) " +
+            "WITH u, count(follower) AS follower " +
+            "ORDER BY follower DESC " +
+            "RETURN u.username AS username, follower " +
+            "LIMIT $n")
+    List<FollowedUser> findTopUsers(int n);
 
     void deleteByUsername(String username);
 }

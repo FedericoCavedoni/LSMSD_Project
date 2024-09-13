@@ -2,10 +2,11 @@ package it.unipi.lsmsd.LSMSD_Project.dao;
 
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGameNode;
-import it.unipi.lsmsd.LSMSD_Project.model.Relation;
+import it.unipi.lsmsd.LSMSD_Project.model.BoardGameLike;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import java.util.Optional;
+import java.util.Map;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface BoardGameNodeRepository extends Neo4jRepository<BoardGameNode,L
             "WHERE $relation IS NULL OR type(r) = $relation " +
             "RETURN b.name AS firstNode, type(r) AS relationType, n.username AS secondNode " +
             "LIMIT $limit")
-    List<Relation> findBoardGameRelationships(String name, String relation, int limit);
+    List<BoardGameLike> findBoardGameRelationships(String name, String relation, int limit);
     @Query("MATCH (u:User {username: $username}) " +
             "OPTIONAL MATCH (b:BoardGame {id: $boardGameId}) " +
             "MERGE (u)-[:LIKED]->(b)")
@@ -41,4 +42,10 @@ public interface BoardGameNodeRepository extends Neo4jRepository<BoardGameNode,L
             "RETURN b.id AS id, b.name AS name " +
             "LIMIT $n")
     List<BoardGameNode> findLikedBoardGamesByUsername(String username, int n);
+    @Query("MATCH (b:BoardGame)<-[:LIKED]-(user:User) " +
+            "WITH b, count(user) AS like " +
+            "ORDER BY like DESC " +
+            "RETURN b.id AS id, b.name AS name, like " +
+            "LIMIT $n")
+    List<BoardGameLike> findTopLikedBoardGames(int n);
 }

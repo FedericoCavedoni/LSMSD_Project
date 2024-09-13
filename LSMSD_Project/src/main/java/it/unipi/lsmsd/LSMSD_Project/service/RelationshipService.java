@@ -1,12 +1,8 @@
 package it.unipi.lsmsd.LSMSD_Project.service;
 
-import it.unipi.lsmsd.LSMSD_Project.model.FollowedUser;
+import it.unipi.lsmsd.LSMSD_Project.model.*;
 import it.unipi.lsmsd.LSMSD_Project.dao.UserNodeRepository;
 import it.unipi.lsmsd.LSMSD_Project.dao.BoardGameNodeRepository;
-import it.unipi.lsmsd.LSMSD_Project.model.BoardGameNode;
-import it.unipi.lsmsd.LSMSD_Project.model.Relation;
-import it.unipi.lsmsd.LSMSD_Project.model.UserNode;
-import it.unipi.lsmsd.LSMSD_Project.model.UserSimilarity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.stereotype.Service;
@@ -14,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -108,5 +102,12 @@ public class RelationshipService {
         return userNodeRepository.findMostSimilarUsers(username, n);
 
 
+    }
+    public List<FollowedUser> getTopUsers(int n) {
+        return userNodeRepository.findTopUsers(n);
+    }
+
+    public List<BoardGameLike> getTopLikedBoardGames(int n) {
+        return boardGameNodeRepository.findTopLikedBoardGames(n);
     }
 }

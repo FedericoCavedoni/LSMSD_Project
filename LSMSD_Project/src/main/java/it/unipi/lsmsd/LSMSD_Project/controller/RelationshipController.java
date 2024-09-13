@@ -1,11 +1,6 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
-import it.unipi.lsmsd.LSMSD_Project.model.FollowedUser;
-import it.unipi.lsmsd.LSMSD_Project.model.Relation;
-import it.unipi.lsmsd.LSMSD_Project.model.User;
-import it.unipi.lsmsd.LSMSD_Project.model.UserNode;
-import it.unipi.lsmsd.LSMSD_Project.model.BoardGameNode;
-import it.unipi.lsmsd.LSMSD_Project.model.UserSimilarity;
+import it.unipi.lsmsd.LSMSD_Project.model.*;
 import it.unipi.lsmsd.LSMSD_Project.service.RelationshipService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.Map;
 
 import java.util.List;
 
@@ -212,6 +208,39 @@ public class RelationshipController {
             return new ResponseEntity<>(similarUsers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/topUsers")
+    public ResponseEntity<?> getTopUsers(@RequestParam int n, HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            List<FollowedUser> topFollowedUsers = relationshipService.getTopUsers(n);
+            return ResponseEntity.ok(topFollowedUsers);
+        } catch (Exception e) {
+            e.printStackTrace();  // or use a proper logging framework
+
+            // Return a detailed error message
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An internal server error occurred: " + e.getMessage());
+        }
+    }
+
+
+    // Endpoint per ottenere i giochi più apprezzati
+    @GetMapping("/topLikedBoardGames")
+    public ResponseEntity<?> getTopLikedBoardGames(@RequestParam int n, HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            List<BoardGameLike> topLikedBoardGames = relationshipService.getTopLikedBoardGames(n);
+            return ResponseEntity.ok(topLikedBoardGames);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

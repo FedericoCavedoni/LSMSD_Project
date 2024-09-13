@@ -10,12 +10,10 @@ import java.util.List;
 @Setter
 public class FollowedUser {
     private String username;
-    private List<String> likedGames;
-    private List<String> followedUser;
+    private long follower;
 
-    public FollowedUser(String username, List<String> likedGames, List<String> followedUser) {
+    public FollowedUser(String username, long follower) {
         this.username = username;
-        this.likedGames = likedGames;
-        this.followedUser = followedUser;
+        this.follower = follower;
     }
 }
