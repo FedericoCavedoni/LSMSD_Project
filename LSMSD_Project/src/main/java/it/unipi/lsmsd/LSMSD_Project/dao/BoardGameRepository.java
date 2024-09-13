@@ -41,6 +41,10 @@ public interface BoardGameRepository extends MongoRepository<BoardGame, String> 
     @Query(value = "{ 'gameId': ?0 }", fields = "{ 'reviews.username': 1, 'reviews.rating': 1, 'reviews.reviewText': 1 }")
     List<ReviewProjection> findReviewProjectionByGameId(long gameId);
 
+    @Query(value = "{ 'name': { $regex: ?0, $options: 'i' } }", fields = "{ 'name' : 1, 'boardgamecategory' : 1, 'minplayers' : 1, 'maxplayers' : 1, 'rating' : 1, 'playingtime' : 1, 'boardgamemechanic' : 1 }")
+    List<BoardGameLimitedProjection> findLimitedBoardGameByName(String name);
+
+
 
 
 

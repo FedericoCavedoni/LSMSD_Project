@@ -31,14 +31,10 @@ public class BoardGameService {
 
 
 
-    public List<BoardGame> getBoardGameByName(String name) {
-        BoardGame exactMatch = boardGameRepository.findByName(name);
-        if (exactMatch != null) {
-            return List.of(exactMatch);
-        } else {
-            return boardGameRepository.findByNameContainingIgnoreCase(name);
-        }
+    public List<BoardGameLimitedProjection> getLimitedBoardGameByName(String name) {
+        return boardGameRepository.findLimitedBoardGameByName(name);
     }
+
 
     public BoardGame updateBoardGame(long id, BoardGame updatedBoardGame) {
         BoardGame existingBoardGame = boardGameRepository.findByGameId(id);
