@@ -121,7 +121,9 @@ public class BoardGameService {
         return boardGameRepository.findBoardGamesByMechanics(mechanics);
     }
 
-
+    public BoardGame getBoardGameByGameId(Long gameId) {
+        return boardGameRepository.findByGameId(gameId);
+    }
 
 
 }
