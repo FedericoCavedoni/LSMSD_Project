@@ -1,0 +1,2044 @@
+{
+	"info": {
+		"_postman_id": "b0348b51-e3a1-4420-b68c-e5def4e1f44c",
+		"name": "Progetto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37305440",
+		"_collection_link": "https://gruppo-large-scale.postman.co/workspace/Gruppo-Large-Scale-Workspace~9d86f106-1b6c-4caf-b8eb-1ad88e59e1f2/collection/37305440-b0348b51-e3a1-4420-b68c-e5def4e1f44c?action=share&source=collection_link&creator=37305440"
+	},
+	"item": [
+		{
+			"name": "BoardGames",
+			"item": [
+				{
+					"name": "AddBoardGame",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gameId\": 12345,\r\n    \"name\": \"Caan\",\r\n    \"year\": 1995,\r\n    \"description\": \"In Catan, players try to be the dominant force on the island of Catan by building settlements, cities, and roads. On each turn, dice are rolled to determine which resources the island produces. Players collect these resources (cards) - wood, grain, brick, sheep, or stone - to build up their civilizations to get to 10 victory points and win the game.&#10;&#10;The game board, which represents the island, is composed of hexagonal tiles (hexes) of different land types, which are laid out randomly at the beginning of each game. Players build settlements at the intersections of these hexes and gain resources based on which hexes they are adjacent to. Settlements can be upgraded to cities, which provide more resources, and players can also build roads to connect their settlements.&#10;&#10;Trading and bartering are key elements of the game. Players can trade resources with each other, and the strategic placement of settlements and roads can block opponents and claim vital resources. Players must also watch out for the robber, who can steal resources and block production on a hex.&#10;&#10;The first player to reach 10 victory points wins, with points gained from settlements, cities, longest road, largest army, and special victory point cards.&#10;&#10;\",\r\n    \"minplayers\": 3,\r\n    \"maxplayers\": 4,\r\n    \"playingtime\": 60,\r\n    \"minplaytime\": 60,\r\n    \"maxplaytime\": 90,\r\n    \"minage\": 10,\r\n    \"boardgamecategory\": [\r\n        \"Economic\",\r\n        \"Negotiation\"\r\n    ],\r\n    \"boardgamemechanic\": [\r\n        \"Dice Rolling\",\r\n        \"Hand Management\",\r\n        \"Modular Board\",\r\n        \"Negotiation\",\r\n        \"Network and Route Building\",\r\n        \"Trading\"\r\n    ],\r\n    \"boardgamedesigner\": [\r\n        \"Klaus Teuber\"\r\n    ],\r\n    \"boardgameartist\": [\r\n        \"Volkan Baga\",\r\n        \"Harald Lieske\",\r\n        \"Michael Menzel\",\r\n        \"Klaus Teuber\"\r\n    ],\r\n    \"rating\": 0.0\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/boardgames/addBoardGame",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"boardgames",
+								"addBoardGame"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteBoardGame",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "gameId",
+									"value": "12345",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/boardgames/deleteBoardGame",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"boardgames",
+								"deleteBoardGame"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getBoardGames",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/boardgames/getBoardGames",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"boardgames",
+								"getBoardGames"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filterByCategories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/boardgames/filterByCategories?categories=Trains",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"boardgames",
+								"filterByCategories"
+							],
+							"query": [
+								{
+									"key": "categories",
+									"value": "Trains"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filterByMechanics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/boardgames/filterByMechanics?mechanics=Card Drafting",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"boardgames",
+								"filterByMechanics"
+							],
+							"query": [
+								{
+									"key": "mechanics",
+									"value": "Card Drafting"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filterByRating",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/boardgames/filterByRating?rating=8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"boardgames",
+								"filterByRating"
+							],
+							"query": [
+								{
+									"key": "rating",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getBoardGamesLimited",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/boardgames/limited?limit=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"boardgames",
+								"limited"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getBoardGamesDetails",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/boardgames/details?gameId=13",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"boardgames",
+								"details"
+							],
+							"query": [
+								{
+									"key": "gameId",
+									"value": "13"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getBoardGameByName",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Pandemic",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/boardgames/getBoardGameByName",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"boardgames",
+								"getBoardGameByName"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateBoardGame",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gameId\": 30549, \r\n    \"name\": \"Pandemic\",\r\n    \"description\": \"In Pandemic, several virulent diseases have broken out simultaneously all over the world! The players are disease-fighting specialists whose mission is to treat disease hotspots while researching cures for each of four plagues before they get out of hand...\",\r\n    \"category\": [\"Medical\"],\r\n    \"rating\": 8.0,\r\n    \"year\": 2008,\r\n    \"minPlayers\": 2,\r\n    \"maxPlayers\": 4,\r\n    \"playingTime\": 45,\r\n    \"minAge\": 8,\r\n    \"mechanics\": [\r\n        \"Action Points\",\r\n        \"Cooperative Game\",\r\n        \"Hand Management\",\r\n        \"Point to Point Movement\",\r\n        \"Set Collection\",\r\n        \"Trading\",\r\n        \"Variable Player Powers\"\r\n    ],\r\n    \"designers\": [\"Matt Leacock\"],\r\n    \"artists\": [\r\n        \"Josh Cappel\",\r\n        \"Christian Hanisch\",\r\n        \"Régis Moulun\",\r\n        \"Chris Quilliams\",\r\n        \"Tom Thiel\"\r\n    ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/boardgames/updateBoardGame",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"boardgames",
+								"updateBoardGame"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateRatings",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/boardgames/updateRatings?date=2024-08-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"boardgames",
+								"updateRatings"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2024-08-01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateReviews",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/boardgames/updateAllReviews?date=2024-08-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"boardgames",
+								"updateAllReviews"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2024-08-01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateAveragePlayingTime",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/boardgames/updateAllAveragePlayingTime?date=2024-06-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"boardgames",
+								"updateAllAveragePlayingTime"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2024-06-01"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "AddReview",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"username\": \"Druplex\",\r\n        \"rating\": 10.0,\r\n        \"review Text\": \"Nice\",\r\n        \"gameId\": 30549,\r\n        \"game\": \"Pandemic\",\r\n        \"date\": \"2024-08-15 10:20:42\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/reviews/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"reviews",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteReview",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "Torsten",
+									"type": "text"
+								},
+								{
+									"key": "gameId",
+									"value": "30549",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/reviews/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"reviews",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getReviewByUsername",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "Torsten",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/reviews/getByUsername",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"reviews",
+								"getByUsername"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getReviewByGame",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "gameId",
+									"value": "30549",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/reviews/getByGame",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"reviews",
+								"getByGame"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReviewUsernameAndGame",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "Torsten",
+									"type": "text"
+								},
+								{
+									"key": "gameId",
+									"value": "30549",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/reviews/findReview",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"reviews",
+								"findReview"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getReviewsByRating",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/reviews/filtered?gameId=30549&minRating=3&maxRating=9&limit=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"reviews",
+								"filtered"
+							],
+							"query": [
+								{
+									"key": "gameId",
+									"value": "30549"
+								},
+								{
+									"key": "minRating",
+									"value": "3"
+								},
+								{
+									"key": "maxRating",
+									"value": "9"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getOrderedByRating",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/reviews/top-or-lowest?gameId=30549&n=10&highest=True",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"reviews",
+								"top-or-lowest"
+							],
+							"query": [
+								{
+									"key": "gameId",
+									"value": "30549"
+								},
+								{
+									"key": "n",
+									"value": "10"
+								},
+								{
+									"key": "highest",
+									"value": "True"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "RegisterUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Chewrtyy0\",\r\n    \"password\": \"securePassword123\",\r\n    \"email\": \"chewy0@gmail.com\",\r\n    \"nome\": \"John\",\r\n    \"cognome\": \"Brown\",\r\n    \"numero\": \"+39416857557\",\r\n    \"dataNascita\": \"03-01-1978\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "RegisterUser",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"Chewy0\",\r\n    \"password\": \"securePassword123\",\r\n    \"email\": \"chewy0@gmail.com\",\r\n    \"nome\": \"John\",\r\n    \"cognome\": \"Brown\",\r\n    \"numeroDiTelefono\": \"+39416857557\",\r\n    \"dataDiNascita\": \"03-01-1978\",\r\n    \"library\": [\r\n        \"Munchkin\",\r\n        \"King of Tokyo\",\r\n        \"7 Wonders Duel\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/users/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users",
+										"register"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "RegisterUser",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"Chewy0\",\r\n    \"password\": \"securePassword123\",\r\n    \"email\": \"chewy0@gmail.com\",\r\n    \"nome\": \"John\",\r\n    \"cognome\": \"Brown\",\r\n    \"numeroDiTelefono\": \"+39416857557\",\r\n    \"dataDiNascita\": \"03-01-1978\",\r\n    \"library\": [\r\n        \"Munchkin\",\r\n        \"King of Tokyo\",\r\n        \"7 Wonders Duel\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/users/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users",
+										"register"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "GetUsernameByName",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "n",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "John",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/getAll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetOwnProfile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "n",
+									"value": "3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/current",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"current"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetOtherUserProfile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "n",
+									"value": "3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/profile?username=Torsten",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"profile"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "Torsten"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProvaLogin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Chewrtyy0",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "securePassword123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/login?Username=&Password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"login"
+							],
+							"query": [
+								{
+									"key": "Username",
+									"value": ""
+								},
+								{
+									"key": "Password",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "ProvaLoginAdmin",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/users/login?Username=admin&Password=admin",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users",
+										"login"
+									],
+									"query": [
+										{
+											"key": "Username",
+											"value": "admin"
+										},
+										{
+											"key": "Password",
+											"value": "admin"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "ProvaLogin",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "Druplex",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "securePassword123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/users/login?Username=&Password",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users",
+										"login"
+									],
+									"query": [
+										{
+											"key": "Username",
+											"value": ""
+										},
+										{
+											"key": "Password",
+											"value": null
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "UpdateProfile",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"66e1af55f8543c1be7eb15e0\",\n    \"username\": \"Chewrtyy0\",\n    \"nome\": \"John\",\n    \"cognome\": \"Brown\",\n    \"email\": \"chewy0@gmail.com\",\n    \"numero\": \"+39416857557\",\n    \"password\": \"$2a$10$jMlNkGC71mg40adJchr8EeBxZnBeygntm8S9qorkabZw17lOsvI3K\",\n    \"dataNascita\": \"03-01-1978\",\n    \"library\": null,\n    \"admin\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/profile/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"profile",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUser",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users/deleteAccount",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"deleteAccount"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/users/deleteAccount",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users",
+										"deleteAccount"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "AddLibrary",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users/addLibrary?gameId=30549",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"addLibrary"
+							],
+							"query": [
+								{
+									"key": "gameId",
+									"value": "30549"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removeLibrary",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users/removeLibrary?gameId=30549",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"removeLibrary"
+							],
+							"query": [
+								{
+									"key": "gameId",
+									"value": "30549"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Matches",
+			"item": [
+				{
+					"name": "GetMatches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/matches/getAll?limit=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"matches",
+								"getAll"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MatchByUser",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/matches/getByUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"matches",
+								"getByUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MatchByGameid",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user",
+									"value": "liq3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/matches/getMatchesByGameId?gameId=30549",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"matches",
+								"getMatchesByGameId"
+							],
+							"query": [
+								{
+									"key": "gameId",
+									"value": "30549"
+								},
+								{
+									"key": "limit",
+									"value": "5",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByUserAndGame",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/matches/getByUserAndGame?user=Torsten&gameId=1912&limit=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"matches",
+								"getByUserAndGame"
+							],
+							"query": [
+								{
+									"key": "user",
+									"value": "Torsten"
+								},
+								{
+									"key": "gameId",
+									"value": "1912"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addMatch",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"gameId\": 154895,\r\n        \"user\": \"liq3\",\r\n        \"game\": \"Wizard's Academy\",\r\n        \"numgiocatori\": 6,\r\n        \"result\": true,\r\n        \"duration\": 93,\r\n        \"date\": \"2020-03-15\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/matches/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"matches",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getGameStatistics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/matches/gameStatistics?minMatches=20&limit=5&ascending=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"matches",
+								"gameStatistics"
+							],
+							"query": [
+								{
+									"key": "minMatches",
+									"value": "20"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "ascending",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllUserStatistics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/matches/userStatistics?n=5&ascending=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"matches",
+								"userStatistics"
+							],
+							"query": [
+								{
+									"key": "n",
+									"value": "5"
+								},
+								{
+									"key": "ascending",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserStatistics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/matches/getLoggedUserStatistics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"matches",
+								"getLoggedUserStatistics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTopPlayer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/matches/topPlayers?limit=10&minMatches=4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"matches",
+								"topPlayers"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "minMatches",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTopPlayerByGame",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/matches/topPlayerByGame?gameId=30549&minMatches=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"matches",
+								"topPlayerByGame"
+							],
+							"query": [
+								{
+									"key": "gameId",
+									"value": "30549"
+								},
+								{
+									"key": "minMatches",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getmostPlayedGameByMatches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/matches/mostPlayedGameByMatches?limit=5&minMatches=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"matches",
+								"mostPlayedGameByMatches"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "minMatches",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getmostPlayedGameByTime",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/matches/mostPlayedGameByTime?limit=5&minMatches=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"matches",
+								"mostPlayedGameByTime"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "minMatches",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTopAvgPlayer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/matches/topAvgPlayers?limit=10&minMatches=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"matches",
+								"topAvgPlayers"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "minMatches",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Relationship",
+			"item": [
+				{
+					"name": "addFollow",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/relation/addFollow?followee=Daumilas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"relation",
+								"addFollow"
+							],
+							"query": [
+								{
+									"key": "followee",
+									"value": "Daumilas"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addLike",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/relation/addLike?boardGameId=177727",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"relation",
+								"addLike"
+							],
+							"query": [
+								{
+									"key": "boardGameId",
+									"value": "177727"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletefollowuser",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/relation/deletefollow?secondNode=Daumilas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"relation",
+								"deletefollow"
+							],
+							"query": [
+								{
+									"key": "secondNode",
+									"value": "Daumilas"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Deletefollowuseradmin",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/relation/deletefollow?firstNode&secondNode",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"relation",
+										"deletefollow"
+									],
+									"query": [
+										{
+											"key": "firstNode",
+											"value": null
+										},
+										{
+											"key": "secondNode",
+											"value": null
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Deletelike",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/relation/deletelike?gameId=177727",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"relation",
+								"deletelike"
+							],
+							"query": [
+								{
+									"key": "gameId",
+									"value": "177727"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Deletelikeuseradmin",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/relation/deletelike",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"relation",
+										"deletelike"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "getFollowed",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/relation/followed?n=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"relation",
+								"followed"
+							],
+							"query": [
+								{
+									"key": "n",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "followed(other)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/relation/followed?n=5&username=misterchan",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"relation",
+										"followed"
+									],
+									"query": [
+										{
+											"key": "n",
+											"value": "5"
+										},
+										{
+											"key": "username",
+											"value": "misterchan"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "getFollowers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/relation/followers?n=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"relation",
+								"followers"
+							],
+							"query": [
+								{
+									"key": "n",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "followed(other)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/relation/followers?n=5&username=misterchan",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"relation",
+										"followers"
+									],
+									"query": [
+										{
+											"key": "n",
+											"value": "5"
+										},
+										{
+											"key": "username",
+											"value": "misterchan"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "getLikedGames",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/relation/likedGames?n=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"relation",
+								"likedGames"
+							],
+							"query": [
+								{
+									"key": "n",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "likedGames(other)",
+							"originalRequest": {
+								"method": "GET",
+								"header": []
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "getTopFollowedUser",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/relation/topFollowedUsers?n=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"relation",
+								"topFollowedUsers"
+							],
+							"query": [
+								{
+									"key": "n",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTopLikedGame",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/relation/topBoardGames?n=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"relation",
+								"topBoardGames"
+							],
+							"query": [
+								{
+									"key": "n",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userMostSimilar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/relation/userMostSimilar?n=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"relation",
+								"userMostSimilar"
+							],
+							"query": [
+								{
+									"key": "n",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTopLikedBoardGames",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/relation/topLikedBoardGames?n=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"relation",
+								"topLikedBoardGames"
+							],
+							"query": [
+								{
+									"key": "n",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTopUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/relation/topUsers?n=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"relation",
+								"topUsers"
+							],
+							"query": [
+								{
+									"key": "n",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

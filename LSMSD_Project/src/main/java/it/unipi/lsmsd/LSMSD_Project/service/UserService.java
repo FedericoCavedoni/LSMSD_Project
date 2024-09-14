@@ -67,7 +67,7 @@ public class UserService {
     public UserOnlyUsernameProjection getOnlyUsernameByUsername(String username) {
         return userRepository.findOnlyUsernameByUsername(username);
     }
-    
+
     public UserProfileProjection getUserProfile(String username) {
         return userRepository.findUserProfileByUsername(username);
     }
