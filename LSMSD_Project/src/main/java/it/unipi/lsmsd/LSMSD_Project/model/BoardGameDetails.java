@@ -1,6 +1,5 @@
 package it.unipi.lsmsd.LSMSD_Project.model;
 
-import it.unipi.lsmsd.LSMSD_Project.projections.ReviewProjection;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,7 @@ import java.util.List;
 @Getter
 @Data
 @Document(collection = "BoardGames")
-public class BoardGame {
+public class BoardGameDetails {
     @Id
     private String mongoId;
 
@@ -57,10 +56,11 @@ public class BoardGame {
     @Field(name = "boardgameartist")
     private List<String> artists;
 
-    @Field(name = "reviews")
-    private List<Review> reviews;
-
     @Field(name = "averageplayingtime")
     private float averagePlayingTime;
+
+    @Field(name = "reviews")
+    private List<FilteredReview> filteredReviews;
+
 
 }

@@ -90,27 +90,14 @@ public class BoardGameService {
     }
 
 
-    public BoardGame getBoardGameDetailsWithReviews(long gameId) {
-        BoardGame boardGame = boardGameRepository.findByGameId(gameId);
-        if (boardGame != null) {
-            // Recupera le recensioni usando la proiezione
-            List<ReviewProjection> reviews = reviewRepository.findReviewsByGameId(gameId);
+    public BoardGameDetails getBoardGameDetailsWithReviews(long gameId) {
 
-            // Converte le recensioni in oggetti FilteredReview
-            List<FilteredReview> filteredReviews = reviews.stream()
-                    .filter(r -> r.getUsername() != null && r.getRating() != null) // Filtra eventuali campi nulli
-                    .map(r -> new FilteredReview(r.getUsername(), r.getRating(), r.getReviewText()))
-                    .collect(Collectors.toList());
-
-            // Imposta le recensioni filtrate nel boardGame (se necessario puoi aggiungere un setter per filteredReviews)
-            boardGame.setFilteredReviews(filteredReviews); // Questo richiede che BoardGame abbia un campo di tipo List<FilteredReview>.
-
-            return boardGame;
+        BoardGameDetails boardGameDetails = boardGameRepository.findGameWithFilteredReviews(gameId);
+        if (boardGameDetails != null) {
+            return boardGameDetails;
         }
         return null;
     }
-
-
 
 
 

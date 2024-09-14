@@ -20,7 +20,7 @@ public class MongoConfig {
     @Bean
     public MongoClient mongoClient() {
         MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(new com.mongodb.ConnectionString("mongodb://localhost:27017/Progetto"))
+                .applyConnectionString(new com.mongodb.ConnectionString("mongodb://localhost:27018/Progetto"))
                 .writeConcern(WriteConcern.W1)
                 .readPreference(ReadPreference.nearest())
                 .build();

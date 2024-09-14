@@ -1,8 +1,13 @@
 package it.unipi.lsmsd.LSMSD_Project.model;
 
+import org.springframework.data.mongodb.core.mapping.Field;
+
 public class FilteredReview {
     private String username;
     private Float rating;
+
+
+    @Field(name = "review text")
     private String reviewText;
 
     public FilteredReview(String username, Float rating, String reviewText) {

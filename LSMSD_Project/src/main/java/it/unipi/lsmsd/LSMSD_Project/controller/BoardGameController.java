@@ -1,6 +1,7 @@
 package it.unipi.lsmsd.LSMSD_Project.controller;
 
 import it.unipi.lsmsd.LSMSD_Project.model.BoardGame;
+import it.unipi.lsmsd.LSMSD_Project.model.BoardGameDetails;
 import it.unipi.lsmsd.LSMSD_Project.model.User;
 import it.unipi.lsmsd.LSMSD_Project.projections.BoardGameLimitedProjection;
 import it.unipi.lsmsd.LSMSD_Project.service.BoardGameService;
@@ -91,10 +92,10 @@ public class BoardGameController {
     }
 
     @GetMapping("/details")
-    public ResponseEntity<BoardGame> getBoardGameDetails(@RequestParam long gameId) {
-        BoardGame boardGame = boardGameService.getBoardGameDetailsWithReviews(gameId);
-        if (boardGame != null) {
-            return ResponseEntity.ok(boardGame);
+    public ResponseEntity<?> getBoardGameDetails(@RequestParam long gameId) {
+        BoardGameDetails boardGameDetails = boardGameService.getBoardGameDetailsWithReviews(gameId);
+        if (boardGameDetails != null) {
+            return ResponseEntity.ok(boardGameDetails);
         } else {
             return ResponseEntity.notFound().build();
         }
